@@ -17,6 +17,7 @@
 
 #pragma once
 // INCLUDES
+#include "hardware/clocks.h"
 #include "pico/binary_info.h"
 #include "pico/bootrom.h"
 #include "pico/multicore.h"
