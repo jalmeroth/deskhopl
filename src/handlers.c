@@ -21,7 +21,8 @@ void handle_keyboard(uint8_t instance, uint8_t report_id, uint8_t protocol,
                      uint8_t const *report, uint16_t len) {
   if (protocol == HID_PROTOCOL_REPORT) {
     if (process_keyboard_report(report, len)) {
-      send_n_report(KEYBOARD_REPORT_MSG, instance, report_id, report, len);
+      send_n_report(KEYBOARD_REPORT_MSG, instance, REPORT_ID_KEYBOARD, report,
+                    len);
     }
   }
 }
