@@ -37,12 +37,6 @@ void send_packet(uint8_t instance, uint8_t report_id, const uint8_t *data,
                        REPORT_ID_LENGTH + REPORT_LEN_LENGTH],
            data, length);
 
-  printf("send ");
-  for (int i = 0; i < PACKET_LENGTH; i++) {
-    printf("%02x ", raw_packet[i]);
-  }
-  printf("\r\n");
-
   /* Packets are short, fixed length, high speed and there is no flow control to
    * block this */
   uart_write_blocking(UART_ZERO, raw_packet, RAW_PACKET_LENGTH);
@@ -57,10 +51,10 @@ void send_value(const uint8_t value, enum packet_type_e packet_type) {
  * ===============  Parsing Packets  ================ *
  * ================================================== */
 const uart_handler_t uart_handler[] = {
-    {.type = KEYBOARD_REPORT_MSG, .handler = handle_generic_uart_msg},
-    {.type = MOUSE_REPORT_MSG, .handler = handle_generic_uart_msg},
-    {.type = CONSUMER_CONTROL_MSG, .handler = handle_generic_uart_msg},
-    {.type = OUTPUT_SELECT_MSG, .handler = handle_output_select_uart_msg},
+    {.type = KEYBOARD_REPORT_MSG, .handler = handle_uart_generic_msg},
+    {.type = MOUSE_REPORT_MSG, .handler = handle_uart_generic_msg},
+    {.type = CONSUMER_CONTROL_MSG, .handler = handle_uart_generic_msg},
+    {.type = OUTPUT_SELECT_MSG, .handler = handle_uart_output_select_msg},
     {.type = LOCK_SCREEN_MSG, .handler = send_lock_screen_report},
     // {.type = FIRMWARE_UPGRADE_MSG, .handler = handle_fw_upgrade_msg},
     // {.type = MOUSE_ZOOM_MSG, .handler = handle_mouse_zoom_msg},
@@ -74,13 +68,6 @@ const uart_handler_t uart_handler[] = {
 };
 
 void process_packet(uart_packet_t *packet, device_t *state) {
-  printf("got instance: %d, report_id: %d data: ", packet->instance,
-         packet->report_id);
-  for (int i = 0; i < PACKET_DATA_LENGTH; i++) {
-    printf("%02x ", packet->data[i]);
-  }
-  printf("\r\n");
-
   if (!verify_checksum(packet)) {
     printf("Checksum verification failed.\r\n");
     return;

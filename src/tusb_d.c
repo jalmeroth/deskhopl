@@ -18,11 +18,7 @@
 #include "main.h"
 
 // Invoked when device is mounted
-void tud_mount_cb(void) {
-  printf("d[mount]\n");
-  uint8_t const itf_protocol = tud_hid_n_get_protocol(0);
-  printf("d[HID Protocol] %d\r\n", itf_protocol);
-}
+void tud_mount_cb(void) { printf("d[mount]\n"); }
 
 // Invoked when device is unmounted
 void tud_umount_cb(void) { printf("d[umount]\n"); }
@@ -43,7 +39,7 @@ void tud_resume_cb(void) { printf("d[resume]\n"); }
 // Note: For composite reports, report[0] is report ID
 void tud_hid_report_complete_cb(uint8_t instance, uint8_t const *report,
                                 uint16_t len) {
-  printf("d[report-complete] instance: %d\r\n", instance);
+  // printf("d[report-complete] instance: %d\r\n", instance);
   (void)report;
   (void)len;
 }

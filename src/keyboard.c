@@ -67,13 +67,12 @@ hotkey_combo_t *check_all_hotkeys(logitech_keyboard_report_t *report) {
   return NULL;
 }
 
-bool process_keyboard_report(uint8_t const *report, uint16_t len) {
+bool process_keyboard_report(uint8_t const *report, uint8_t len) {
   logitech_keyboard_report_t *keyboard_report =
       (logitech_keyboard_report_t *)report;
   hotkey_combo_t *hotkey = NULL;
   bool pass_to_os = true;
 
-  printf("report_len: %d modifier: %d\r\n", len, keyboard_report->modifier);
   hotkey = check_all_hotkeys(keyboard_report);
 
   /* ... and take appropriate action */

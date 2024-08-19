@@ -74,6 +74,7 @@ foreach(board_role RANGE 0 1)
         ${CMAKE_CURRENT_LIST_DIR}/tusb_descriptors.c
         ${CMAKE_CURRENT_LIST_DIR}/tusb_h.c
         ${CMAKE_CURRENT_LIST_DIR}/uart.c
+        ${CMAKE_CURRENT_LIST_DIR}/usb.c
         ${CMAKE_CURRENT_LIST_DIR}/utils.c
         ${PICO_TINYUSB_PATH}/src/portable/raspberrypi/pio_usb/hcd_pio_usb.c
     )

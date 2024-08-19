@@ -19,7 +19,7 @@
 
 void switch_output(void) {
   global_state.active_output ^= 1;
-  send_value(1, OUTPUT_SELECT_MSG);
+  send_value(global_state.active_output, OUTPUT_SELECT_MSG);
 }
 
 void send_lock_screen_report(uart_packet_t *packet, device_t *state) {
@@ -41,17 +41,10 @@ void send_lock_screen_report(uart_packet_t *packet, device_t *state) {
     lock_report.keycode[off] = 1 << pos;
   }
 
-  if (tud_ready()) {
-    bool result = false;
-    result = tud_hid_n_report(ITF_NUM_HID_KB, 0, (uint8_t *)&lock_report,
-                              PACKET_DATA_LENGTH);
-    printf("x[report] success: %s\r\n", result ? "true" : "false");
-    result = tud_hid_n_report(ITF_NUM_HID_KB, 0, (uint8_t *)&release_keys,
-                              PACKET_DATA_LENGTH);
-    printf("x[report] success: %s\r\n", result ? "true" : "false");
-  } else {
-    printf("x[report] tud not ready\r\n");
-  }
+  send_tud_report(ITF_NUM_HID_KB, REPORT_ID_KEYBOARD, (uint8_t *)&lock_report,
+                  PACKET_DATA_LENGTH);
+  send_tud_report(ITF_NUM_HID_KB, REPORT_ID_KEYBOARD, (uint8_t *)&release_keys,
+                  PACKET_DATA_LENGTH);
 }
 
 /* This key combo locks both outputs simultaneously */

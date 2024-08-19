@@ -97,7 +97,7 @@ typedef struct { // Maps message type -> message handler function
 // Logitech HID Report Protocol Keyboard Report.
 typedef struct TU_ATTR_PACKED {
   uint8_t modifier;    /**< Keyboard modifier (KEYBOARD_MODIFIER_* masks). */
-  uint8_t keycode[14]; /**< Key codes of the currently pressed keys. */
+  uint8_t keycode[15]; /**< Key codes of the currently pressed keys. */
 } logitech_keyboard_report_t;
 
 typedef struct {
@@ -155,24 +155,27 @@ void send_lock_screen_report(uart_packet_t *packet, device_t *state);
 void switch_output(void);
 // handlers.c
 void handle_keyboard(uint8_t instance, uint8_t report_id, uint8_t protocol,
-                     uint8_t const *report, uint16_t len);
+                     uint8_t const *report, uint8_t len);
 void handle_mouse(uint8_t instance, uint8_t report_id, uint8_t protocol,
-                  uint8_t const *report, uint16_t len);
+                  uint8_t const *report, uint8_t len);
 void handle_consumer(uint8_t instance, uint8_t report_id, uint8_t protocol,
-                     uint8_t const *report, uint16_t len);
-void handle_generic_uart_msg(uart_packet_t *packet, device_t *state);
-void handle_output_select_uart_msg(uart_packet_t *packet, device_t *state);
-bool send_n_report(enum packet_type_e packet_type, uint8_t instance,
-                   uint8_t report_id, uint8_t const *report, uint16_t len);
+                     uint8_t const *report, uint8_t len);
+void handle_uart_generic_msg(uart_packet_t *packet, device_t *state);
+void handle_uart_output_select_msg(uart_packet_t *packet, device_t *state);
 // keyboard.c
 uint8_t get_byte_offset(uint8_t key);
 uint8_t get_pos_in_byte(uint8_t key);
-bool process_keyboard_report(uint8_t const *report, uint16_t len);
+bool process_keyboard_report(uint8_t const *report, uint8_t len);
 // uart.c
 void receive_char(uart_packet_t *packet, device_t *state);
 void send_packet(uint8_t instance, uint8_t report_id, const uint8_t *data,
                  enum packet_type_e packet_type, int length);
 void send_value(const uint8_t value, enum packet_type_e packet_type);
+// usb.c
+bool send_tud_report(uint8_t instance, uint8_t report_id, uint8_t const *report,
+                     uint8_t len);
+bool send_x_report(enum packet_type_e packet_type, uint8_t instance,
+                   uint8_t report_id, uint8_t const *report, uint8_t len);
 // utils.c
 uint8_t calc_checksum(const uint8_t *data, int length);
 bool verify_checksum(const uart_packet_t *packet);

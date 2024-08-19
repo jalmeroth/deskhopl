@@ -18,68 +18,52 @@
 #include "main.h"
 
 void handle_keyboard(uint8_t instance, uint8_t report_id, uint8_t protocol,
-                     uint8_t const *report, uint16_t len) {
-  if (protocol == HID_PROTOCOL_REPORT) {
-    if (process_keyboard_report(report, len)) {
-      send_n_report(KEYBOARD_REPORT_MSG, instance, REPORT_ID_KEYBOARD, report,
-                    len);
+                     uint8_t const *report, uint8_t len) {
+
+  hid_keyboard_report_t *original = (hid_keyboard_report_t *)report;
+  logitech_keyboard_report_t pressed = {original->modifier, {0}};
+
+  if (len == 8) {
+    for (uint8_t i = 0; i < 6; i++) {
+      uint8_t key = original->keycode[i];
+      if (key) {
+        uint8_t off = get_byte_offset(key);
+        uint8_t pos = get_pos_in_byte(key);
+        pressed.keycode[off] ^= 1 << pos;
+      }
     }
+
+    report = (uint8_t *)&pressed;
+    len = 16;
+  }
+  if (process_keyboard_report(report, len)) {
+    send_x_report(KEYBOARD_REPORT_MSG, instance, REPORT_ID_KEYBOARD, report,
+                  len);
   }
 }
 
 void handle_mouse(uint8_t instance, uint8_t report_id, uint8_t protocol,
-                  uint8_t const *report, uint16_t len) {
+                  uint8_t const *report, uint8_t len) {
   (void)protocol;
   if (report[0] == MOUSE_BUTTON_MIDDLE) {
     switch_output();
   } else {
-    send_n_report(MOUSE_REPORT_MSG, instance, report_id, report, len);
+    send_x_report(MOUSE_REPORT_MSG, instance, report_id, report, len);
   }
 }
 
 void handle_consumer(uint8_t instance, uint8_t report_id, uint8_t protocol,
-                     uint8_t const *report, uint16_t len) {
+                     uint8_t const *report, uint8_t len) {
   (void)protocol;
-  send_n_report(CONSUMER_CONTROL_MSG, instance, report_id, report, len);
+  send_x_report(CONSUMER_CONTROL_MSG, instance, report_id, report, len);
 }
 
-void handle_generic_uart_msg(uart_packet_t *packet, device_t *state) {
+void handle_uart_generic_msg(uart_packet_t *packet, device_t *state) {
   (void)state;
-  send_n_report(packet->type, packet->instance, packet->report_id, packet->data,
+  send_x_report(packet->type, packet->instance, packet->report_id, packet->data,
                 packet->report_len);
 }
 
-void handle_output_select_uart_msg(uart_packet_t *packet, device_t *state) {
-  state->active_output ^= 1;
-  tud_remote_wakeup();
-}
-
-bool send_n_report(enum packet_type_e packet_type, uint8_t instance,
-                   uint8_t report_id, uint8_t const *report, uint16_t len) {
-  bool result = false;
-
-  if (len > PACKET_DATA_LENGTH) {
-    // stop flooding on disconnects?
-    return result;
-  }
-
-  printf("x[report] instance: %d report_id: %d size %d\r\n", instance,
-         report_id, len);
-  for (uint32_t i = 0; i < len; i++) {
-    printf("%02x ", report[i]);
-  }
-  printf("\r\n");
-
-  if (BOARD_ROLE == global_state.active_output) {
-    if (tud_ready()) {
-      result = tud_hid_n_report(instance, report_id, report, len);
-      printf("x[report] success: %s\r\n", result ? "true" : "false");
-    } else {
-      printf("x[report] tud not ready\r\n");
-    }
-  } else {
-    send_packet(instance, report_id, (uint8_t *)report, packet_type, len);
-  }
-
-  return result;
+void handle_uart_output_select_msg(uart_packet_t *packet, device_t *state) {
+  state->active_output = packet->data[0];
 }
