@@ -17,6 +17,22 @@
 
 #include "main.h"
 
+void convert_keycodes(const uint8_t *hid_report,
+                      logitech_keyboard_report_t *new_report) {
+
+  hid_keyboard_report_t *original = (hid_keyboard_report_t *)hid_report;
+  new_report->modifier = original->modifier;
+
+  for (uint8_t i = 0; i < 6; i++) {
+    uint8_t key = original->keycode[i];
+    if (key) {
+      uint8_t off = get_byte_offset(key);
+      uint8_t pos = get_pos_in_byte(key);
+      new_report->keycode[off] ^= 1 << pos;
+    }
+  }
+}
+
 void handle_keyboard(uint8_t instance, uint8_t report_id, uint8_t protocol,
                      uint8_t const *report, uint8_t len) {
 
@@ -24,15 +40,7 @@ void handle_keyboard(uint8_t instance, uint8_t report_id, uint8_t protocol,
   logitech_keyboard_report_t pressed = {original->modifier, {0}};
 
   if (len == 8) {
-    for (uint8_t i = 0; i < 6; i++) {
-      uint8_t key = original->keycode[i];
-      if (key) {
-        uint8_t off = get_byte_offset(key);
-        uint8_t pos = get_pos_in_byte(key);
-        pressed.keycode[off] ^= 1 << pos;
-      }
-    }
-
+    convert_keycodes(report, &pressed);
     report = (uint8_t *)&pressed;
     len = 16;
   }
