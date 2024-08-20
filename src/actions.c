@@ -20,6 +20,7 @@
 void switch_output(void) {
   global_state.active_output ^= 1;
   send_value(global_state.active_output, OUTPUT_SELECT_MSG);
+  set_keyboard_leds();
 }
 
 void send_lock_screen_report(uart_packet_t *packet, device_t *state) {
@@ -45,6 +46,19 @@ void send_lock_screen_report(uart_packet_t *packet, device_t *state) {
                   PACKET_DATA_LENGTH);
   send_tud_report(ITF_NUM_HID_KB, REPORT_ID_KEYBOARD, (uint8_t *)&release_keys,
                   PACKET_DATA_LENGTH);
+}
+
+void set_keyboard_leds(void) {
+  if (BOARD_ROLE == PICO_A) {
+    uint8_t leds;
+    if (global_state.active_output == PICO_A) {
+      leds = 1 << 1; // CapsLock
+    } else {
+      leds = 0;
+    }
+    tuh_hid_set_report(1, ITF_NUM_HID_KB, 0, HID_REPORT_TYPE_OUTPUT, &leds,
+                       sizeof(uint8_t));
+  }
 }
 
 /* This key combo locks both outputs simultaneously */

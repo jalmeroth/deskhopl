@@ -150,6 +150,7 @@ void initial_setup(void);
 void setup_uart(void);
 void setup_tuh(void);
 // actions.c
+void set_keyboard_leds(void);
 void lock_screen(void);
 void send_lock_screen_report(uart_packet_t *packet, device_t *state);
 void switch_output(void);
