@@ -34,6 +34,7 @@
 // BOARD CONFIG
 #define PICO_A 0
 #define PICO_B 1
+#define GPIO_LED_PIN 25 // LED is connected to pin 25 on a PICO
 
 // UART CONFIG
 #define UART_ZERO uart0
@@ -150,9 +151,11 @@ void initial_setup(void);
 void setup_uart(void);
 void setup_tuh(void);
 // actions.c
-void set_keyboard_leds(void);
 void lock_screen(void);
+void restore_leds(void);
 void send_lock_screen_report(uart_packet_t *packet, device_t *state);
+void set_keyboard_leds(void);
+void set_onboard_led(void);
 void switch_output(void);
 // handlers.c
 void handle_keyboard(uint8_t instance, uint8_t report_id, uint8_t protocol,

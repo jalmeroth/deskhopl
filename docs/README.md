@@ -4,23 +4,25 @@
 
 ### PICO A
 
-| GPIO | Description | optional |
-| ---- | ----------- | :------: |
-| 4    | UART1 TX    |    x     |
-| 5    | UART1 RX    |    x     |
-| 12   | UART0 TX    |          |
-| 13   | UART0 RX    |          |
-| 14   | USB DP PIN  |          |
+| Description | GPIO | optional |
+| ----------- | ---- | -------- |
+| UART1 TX    | 4    | x        |
+| UART1 RX    | 5    | x        |
+| UART0 TX    | 12   |          |
+| UART0 RX    | 13   |          |
+| USB DP      | 14   |          |
+| LED         | 25   |          |
 
 ### PICO B
 
-| GPIO | Description | optional |
-| ---- | ----------- | :------: |
-| 4    | UART1 TX    |    x     |
-| 5    | UART1 RX    |    x     |
-| 14   | USB DP PIN  |          |
-| 16   | UART0 TX    |          |
-| 17   | UART0 RX    |          |
+| Description | GPIO | optional |
+| ----------- | ---- | -------- |
+| UART1 TX    | 4    | x        |
+| UART1 RX    | 5    | x        |
+| USB DP      | 14   |          |
+| UART0 TX    | 16   |          |
+| UART0 RX    | 17   |          |
+| LED         | 25   |          |
 
 ## Further links
 

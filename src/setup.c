@@ -49,12 +49,17 @@ void setup_tuh(void) {
   tuh_init(1);
 
   // put pin config into binary_info
-  bi_decl(bi_1pin_with_name(PIO_USB_DP_PIN_DEFAULT, "USB DP PIN"));
+  bi_decl(bi_1pin_with_name(PIO_USB_DP_PIN_DEFAULT, "USB DP"));
 }
 
 void initial_setup(void) {
   // default 125MHz is not appropreate. Sysclock should be multiple of 12MHz.
   set_sys_clock_khz(120000, true);
+
+  /* Init and enable the on-board LED GPIO as output */
+  gpio_init(GPIO_LED_PIN);
+  gpio_set_dir(GPIO_LED_PIN, GPIO_OUT);
+  bi_decl(bi_1pin_with_name(GPIO_LED_PIN, "LED"));
 
   setup_uart();
 
@@ -65,4 +70,6 @@ void initial_setup(void) {
   multicore_reset_core1();
   // all USB task run in core1
   multicore_launch_core1(core1_main);
+
+  restore_leds();
 }

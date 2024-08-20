@@ -17,10 +17,15 @@
 
 #include "main.h"
 
-void switch_output(void) {
-  global_state.active_output ^= 1;
-  send_value(global_state.active_output, OUTPUT_SELECT_MSG);
-  set_keyboard_leds();
+/* This key combo locks both outputs simultaneously */
+void lock_screen(void) {
+  send_lock_screen_report(NULL, NULL);
+  send_value(1, LOCK_SCREEN_MSG);
+}
+
+void restore_leds(void) {
+  // set_keyboard_leds();
+  set_onboard_led();
 }
 
 void send_lock_screen_report(uart_packet_t *packet, device_t *state) {
@@ -61,8 +66,13 @@ void set_keyboard_leds(void) {
   }
 }
 
-/* This key combo locks both outputs simultaneously */
-void lock_screen(void) {
-  send_lock_screen_report(NULL, NULL);
-  send_value(1, LOCK_SCREEN_MSG);
+void set_onboard_led(void) {
+  uint8_t new_led_state = (global_state.active_output == BOARD_ROLE);
+  gpio_put(GPIO_LED_PIN, new_led_state);
+}
+
+void switch_output(void) {
+  global_state.active_output ^= 1;
+  send_value(global_state.active_output, OUTPUT_SELECT_MSG);
+  restore_leds();
 }
