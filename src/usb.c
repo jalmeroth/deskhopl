@@ -24,6 +24,7 @@ bool send_x_report(enum packet_type_e packet_type, uint8_t instance,
   }
 
   if (BOARD_ROLE == global_state.active_output) {
+    global_state.last_activity = time_us_64();
     success = send_tud_report(instance, report_id, report, len);
     if (!success) {
       printf("x[send] instance %d report_id %d type %d size %d\r\n", instance,

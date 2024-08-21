@@ -35,6 +35,8 @@
 #define PICO_A 0
 #define PICO_B 1
 #define GPIO_LED_PIN 25 // LED is connected to pin 25 on a PICO
+#define SCREENSAVER_ENABLED 1
+#define SCREENSAVER_IDLE_TIME (240 * 1000000)
 
 // UART CONFIG
 #define UART_ZERO uart0
@@ -83,7 +85,8 @@ enum packet_type_e {
 typedef enum { IDLE, READING_PACKET, PROCESSING_PACKET } receiver_state_t;
 
 typedef struct {
-  uint8_t active_output; // Currently selected output (0 = A, 1 = B)
+  uint8_t active_output;  // Currently selected output (0 = A, 1 = B)
+  uint64_t last_activity; // Timestamp of the last input activity
   receiver_state_t
       receiver_state; // Storing the state for the simple receiver state machine
 } device_t;
@@ -100,6 +103,15 @@ typedef struct TU_ATTR_PACKED {
   uint8_t modifier;    /**< Keyboard modifier (KEYBOARD_MODIFIER_* masks). */
   uint8_t keycode[15]; /**< Key codes of the currently pressed keys. */
 } keyboard_report_t;
+
+typedef struct TU_ATTR_PACKED {
+  uint8_t buttons[2]; /**< buttons mask for currently pressed buttons in the
+                         mouse. */
+  int16_t x;          /**< Current x position of the mouse. */
+  int16_t y;          /**< Current y position of the mouse. */
+  int8_t wheel;       /**< Current delta wheel movement on the mouse. */
+  int8_t pan;         // using AC Pan
+} mouse_report_t;
 
 typedef struct {
   uint8_t modifier;  // Which modifier is pressed
@@ -153,6 +165,7 @@ void setup_tuh(void);
 // actions.c
 void lock_screen(void);
 void restore_leds(void);
+void screensaver_task(void);
 void send_lock_screen_report(uart_packet_t *packet, device_t *state);
 void set_keyboard_leds(void);
 void set_onboard_led(void);

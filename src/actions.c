@@ -28,6 +28,37 @@ void restore_leds(void) {
   set_onboard_led();
 }
 
+void screensaver_task(void) {
+  const unsigned int mouse_move_delay = 1000000;
+  uint64_t inactivity_period = time_us_64() - global_state.last_activity;
+
+  static mouse_report_t report = {0};
+  static int last_pointer_move = 0;
+  static int jitter = 1;
+
+  /* If we're not enabled, nothing to do here. */
+  if (!SCREENSAVER_ENABLED)
+    return;
+
+  /* System is still not idle for long enough to activate or we've been running
+   * for too long */
+  if (inactivity_period < SCREENSAVER_IDLE_TIME)
+    return;
+
+  /* We're active! Now check if it's time to move the cursor yet. */
+  if ((time_us_32()) - last_pointer_move < mouse_move_delay)
+    return;
+
+  report.x = jitter;
+  jitter = -jitter;
+
+  /* Move mouse pointer */
+  send_tud_report(ITF_NUM_HID_MS, REPORT_ID_MOUSE, (uint8_t *)&report, 8);
+
+  /* Update timer of the last pointer move */
+  last_pointer_move = time_us_32();
+}
+
 void send_lock_screen_report(uart_packet_t *packet, device_t *state) {
   (void)packet;
   (void)state;

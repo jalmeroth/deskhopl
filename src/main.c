@@ -41,6 +41,7 @@ int main() {
   while (true) {
     // USB device task, needs to run as often as possible
     tud_task();
+    screensaver_task();
 
     stdio_flush();
     sleep_us(10);
