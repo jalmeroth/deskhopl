@@ -29,7 +29,7 @@ uint8_t get_pos_in_byte(uint8_t key) {
 }
 
 /* Tries to find if the keyboard report contains key, returns true/false */
-bool key_in_report(uint8_t key, const logitech_keyboard_report_t *report) {
+bool key_in_report(uint8_t key, const keyboard_report_t *report) {
   uint8_t off = get_byte_offset(key);
   uint8_t pos = get_pos_in_byte(key);
   uint8_t val = 1 << pos;
@@ -42,7 +42,7 @@ bool key_in_report(uint8_t key, const logitech_keyboard_report_t *report) {
 
 /* Check if the current report matches a specific hotkey passed on */
 bool check_specific_hotkey(hotkey_combo_t keypress,
-                           const logitech_keyboard_report_t *report) {
+                           const keyboard_report_t *report) {
   /* We expect all modifiers specified to be detected in the report */
   if (keypress.modifier != (report->modifier & keypress.modifier))
     return false;
@@ -58,7 +58,7 @@ bool check_specific_hotkey(hotkey_combo_t keypress,
 }
 
 /* Go through the list of hotkeys, check if any of them match. */
-hotkey_combo_t *check_all_hotkeys(logitech_keyboard_report_t *report) {
+hotkey_combo_t *check_all_hotkeys(keyboard_report_t *report) {
   for (int n = 0; n < ARRAY_SIZE(hotkeys); n++) {
     if (check_specific_hotkey(hotkeys[n], report)) {
       return &hotkeys[n];
@@ -68,8 +68,7 @@ hotkey_combo_t *check_all_hotkeys(logitech_keyboard_report_t *report) {
 }
 
 bool process_keyboard_report(uint8_t const *report, uint8_t len) {
-  logitech_keyboard_report_t *keyboard_report =
-      (logitech_keyboard_report_t *)report;
+  keyboard_report_t *keyboard_report = (keyboard_report_t *)report;
   hotkey_combo_t *hotkey = NULL;
   bool pass_to_os = true;
 

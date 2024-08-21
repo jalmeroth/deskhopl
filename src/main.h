@@ -99,7 +99,7 @@ typedef struct { // Maps message type -> message handler function
 typedef struct TU_ATTR_PACKED {
   uint8_t modifier;    /**< Keyboard modifier (KEYBOARD_MODIFIER_* masks). */
   uint8_t keycode[15]; /**< Key codes of the currently pressed keys. */
-} logitech_keyboard_report_t;
+} keyboard_report_t;
 
 typedef struct {
   uint8_t modifier;  // Which modifier is pressed

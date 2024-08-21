@@ -32,7 +32,7 @@ void send_lock_screen_report(uart_packet_t *packet, device_t *state) {
   (void)packet;
   (void)state;
 
-  logitech_keyboard_report_t lock_report = {0}, release_keys = {0};
+  keyboard_report_t lock_report = {0}, release_keys = {0};
 
   if (BOARD_ROLE == PICO_A) { // Linux
     lock_report.modifier = KEYBOARD_MODIFIER_LEFTGUI;
