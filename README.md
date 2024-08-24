@@ -11,7 +11,7 @@ I started this project from scratch and just copied the very least code that is 
 - we are using the `HID_PROTOCOL_REPORT` by default
 - we are passing through received reports as-is (no re-mapping)
 - your multi-monitor setup will just work as we don't alter the mouse\*
-- modified HID device descriptors compatible with Logitech devices
+- HID device descriptors compatible with Logitech devices
 - support for "Suspend both PCs" via shortcut (Linux/macOS)
 - support for "Screensaver mode" by jiggling the mouse just one pixel
 

@@ -39,7 +39,7 @@ jobs:
 
       - name: Build
         run: |
-          export PICO_PIO_USB_PATH="${PWD}/pico-pio-usb/src"
+          export PICO_PIO_USB_PATH="${PWD}/pico-pio-usb"
           export PICO_SDK_PATH="${PWD}/pico-sdk"
           export PICO_TINYUSB_PATH="${PWD}/tinyusb"
 
