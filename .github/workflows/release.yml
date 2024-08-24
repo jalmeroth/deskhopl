@@ -4,6 +4,8 @@ on:
     tags:
       - "v*"
   workflow_dispatch:
+permissions:
+  contents: write
 jobs:
   build:
     uses: ./.github/workflows/build.yml
@@ -15,7 +17,10 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: artifact
-          path: download
+          path: artifacts
 
-      - name: Display structure of downloaded files
-        run: ls -R
+      - name: create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create --repo "${{github.repository}}" --generate-notes "${{github.ref_name}}" artifacts/*.uf2
