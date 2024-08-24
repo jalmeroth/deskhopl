@@ -176,7 +176,6 @@ void restore_leds(void);
 void screensaver_task(void);
 void send_suspend_pc_report(uart_packet_t *packet, device_t *state);
 void send_lock_screen_report(uart_packet_t *packet, device_t *state);
-void set_keyboard_leds(void);
 void set_onboard_led(void);
 void switch_output(void);
 // handlers.c

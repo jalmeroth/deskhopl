@@ -23,10 +23,7 @@ void lock_screen(void) {
   send_lock_screen_report(NULL, NULL);
 }
 
-void restore_leds(void) {
-  // set_keyboard_leds();
-  set_onboard_led();
-}
+void restore_leds(void) { set_onboard_led(); }
 
 void suspend_pc(void) {
   send_value(1, SUSPEND_PC_MSG);
@@ -125,19 +122,6 @@ void send_suspend_pc_report(uart_packet_t *packet, device_t *state) {
     restore_leds();
   }
   set_tud_connected(false);
-}
-
-void set_keyboard_leds(void) {
-  if (BOARD_ROLE == PICO_A) {
-    uint8_t leds;
-    if (global_state.active_output == PICO_A) {
-      leds = 1 << 1; // CapsLock
-    } else {
-      leds = 0;
-    }
-    tuh_hid_set_report(1, ITF_NUM_HID_KB, 0, HID_REPORT_TYPE_OUTPUT, &leds,
-                       sizeof(uint8_t));
-  }
 }
 
 void set_onboard_led(void) {
