@@ -19,13 +19,18 @@
 
 /* This key combo locks both outputs simultaneously */
 void lock_screen(void) {
-  send_lock_screen_report(NULL, NULL);
   send_value(1, LOCK_SCREEN_MSG);
+  send_lock_screen_report(NULL, NULL);
 }
 
 void restore_leds(void) {
   // set_keyboard_leds();
   set_onboard_led();
+}
+
+void suspend_pc(void) {
+  send_value(1, SUSPEND_PC_MSG);
+  send_suspend_pc_report(NULL, NULL);
 }
 
 void screensaver_task(void) {
@@ -38,6 +43,9 @@ void screensaver_task(void) {
 
   /* If we're not enabled, nothing to do here. */
   if (!SCREENSAVER_ENABLED)
+    return;
+
+  if (!global_state.tud_connected)
     return;
 
   /* System is still not idle for long enough to activate or we've been running
@@ -82,6 +90,41 @@ void send_lock_screen_report(uart_packet_t *packet, device_t *state) {
                   PACKET_DATA_LENGTH);
   send_tud_report(ITF_NUM_HID_KB, REPORT_ID_KEYBOARD, (uint8_t *)&release_keys,
                   PACKET_DATA_LENGTH);
+}
+
+void send_suspend_pc_report(uart_packet_t *packet, device_t *state) {
+  (void)packet;
+  (void)state;
+
+  keyboard_report_t lock_report = {0};
+
+  if (BOARD_ROLE == PICO_A) { // Linux
+    lock_report.modifier = KEYBOARD_MODIFIER_LEFTGUI |
+                           KEYBOARD_MODIFIER_LEFTCTRL |
+                           KEYBOARD_MODIFIER_LEFTSHIFT;
+    uint8_t off = get_byte_offset(HID_KEY_Q);
+    uint8_t pos = get_pos_in_byte(HID_KEY_Q);
+    lock_report.keycode[off] = 1 << pos;
+  } else if (BOARD_ROLE == PICO_B) { // MACOS
+    lock_report.modifier =
+        KEYBOARD_MODIFIER_LEFTALT | KEYBOARD_MODIFIER_LEFTGUI;
+  }
+
+  send_tud_report(ITF_NUM_HID_KB, REPORT_ID_KEYBOARD, (uint8_t *)&lock_report,
+                  PACKET_DATA_LENGTH);
+
+  if (BOARD_ROLE == PICO_B) {
+    consumer_report_t eject_report = {0};
+    eject_report.apple = 1 << 3; // Usage (Eject)
+    send_tud_report(ITF_NUM_HID_MS, 3, (uint8_t *)&eject_report,
+                    sizeof(consumer_report_t));
+    // we need to make sure MACOS that is not receiving
+    // any reports until our USB device gets suspended
+    global_state.active_output = PICO_A;
+    send_value(global_state.active_output, OUTPUT_SELECT_MSG);
+    restore_leds();
+  }
+  global_state.tud_connected = false;
 }
 
 void set_keyboard_leds(void) {

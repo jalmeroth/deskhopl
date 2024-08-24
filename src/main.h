@@ -81,12 +81,14 @@ enum packet_type_e {
   OUTPUT_CONFIG_MSG = 14,
   CONSUMER_CONTROL_MSG = 15,
   LOCK_SCREEN_MSG = 16,
+  SUSPEND_PC_MSG = 17,
 };
 typedef enum { IDLE, READING_PACKET, PROCESSING_PACKET } receiver_state_t;
 
 typedef struct {
   uint8_t active_output;  // Currently selected output (0 = A, 1 = B)
   uint64_t last_activity; // Timestamp of the last input activity
+  bool tud_connected;     // Are we connected to the host
   receiver_state_t
       receiver_state; // Storing the state for the simple receiver state machine
 } device_t;
@@ -112,6 +114,11 @@ typedef struct TU_ATTR_PACKED {
   int8_t wheel;       /**< Current delta wheel movement on the mouse. */
   int8_t pan;         // using AC Pan
 } mouse_report_t;
+
+typedef struct TU_ATTR_PACKED {
+  uint8_t logitech[4];
+  uint8_t apple;
+} consumer_report_t;
 
 typedef struct {
   uint8_t modifier;  // Which modifier is pressed
@@ -164,8 +171,10 @@ void setup_uart(void);
 void setup_tuh(void);
 // actions.c
 void lock_screen(void);
+void suspend_pc(void);
 void restore_leds(void);
 void screensaver_task(void);
+void send_suspend_pc_report(uart_packet_t *packet, device_t *state);
 void send_lock_screen_report(uart_packet_t *packet, device_t *state);
 void set_keyboard_leds(void);
 void set_onboard_led(void);

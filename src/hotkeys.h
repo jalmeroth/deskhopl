@@ -29,4 +29,9 @@ hotkey_combo_t hotkeys[] = {
      .key_count = 1,
      .pass_to_os = false,
      .action_handler = &lock_screen},
+    {.modifier = KEYBOARD_MODIFIER_RIGHTALT | KEYBOARD_MODIFIER_RIGHTSHIFT,
+     .keys = {HID_KEY_S},
+     .key_count = 1,
+     .pass_to_os = false,
+     .action_handler = &suspend_pc},
 };

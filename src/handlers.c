@@ -63,7 +63,10 @@ void handle_mouse(uint8_t instance, uint8_t report_id, uint8_t protocol,
 void handle_consumer(uint8_t instance, uint8_t report_id, uint8_t protocol,
                      uint8_t const *report, uint8_t len) {
   (void)protocol;
-  send_x_report(CONSUMER_CONTROL_MSG, instance, report_id, report, len);
+  // Extend report with Apple media keys
+  consumer_report_t *new_report = (consumer_report_t *)report;
+  send_x_report(CONSUMER_CONTROL_MSG, instance, report_id,
+                (uint8_t *)new_report, sizeof(consumer_report_t));
 }
 
 void handle_uart_generic_msg(uart_packet_t *packet, device_t *state) {
