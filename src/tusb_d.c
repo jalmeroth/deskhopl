@@ -20,13 +20,13 @@
 // Invoked when device is mounted
 void tud_mount_cb(void) {
   printf("d[mount]\n");
-  global_state.tud_connected = true;
+  set_tud_connected(true);
 }
 
 // Invoked when device is unmounted
 void tud_umount_cb(void) {
   printf("d[umount]\n");
-  global_state.tud_connected = false;
+  set_tud_connected(false);
 }
 
 // Invoked when usb bus is suspended
@@ -34,8 +34,8 @@ void tud_umount_cb(void) {
 // Within 7ms, device must draw an average of current less than 2.5 mA from bus
 void tud_suspend_cb(bool remote_wakeup_en) {
   // (void)remote_wakeup_en;
-  printf("d[suspend] %s\n", remote_wakeup_en ? "true" : "false");
-  global_state.tud_connected = false;
+  printf("d[suspend] wakeup enabled %s\n", remote_wakeup_en ? "true" : "false");
+  set_tud_connected(false);
 }
 
 // Invoked when usb bus is resumed
@@ -45,7 +45,7 @@ void tud_resume_cb(void) {
     tud_deinit(BOARD_TUD_RHPORT);
     tud_init(BOARD_TUD_RHPORT);
   }
-  global_state.tud_connected = true;
+  set_tud_connected(true);
 }
 
 // Invoked when sent REPORT successfully to host

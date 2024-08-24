@@ -31,6 +31,11 @@ uint8_t calc_checksum(const uint8_t *data, int length) {
   return checksum;
 }
 
+void set_tud_connected(bool connected) {
+  global_state.tud_connected = connected;
+  printf("tud connected: %s\r\n", connected ? "true" : "false");
+}
+
 bool verify_checksum(const uart_packet_t *packet) {
   uint8_t checksum = calc_checksum(packet->data, PACKET_DATA_LENGTH);
   return checksum == packet->checksum;

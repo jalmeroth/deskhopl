@@ -204,6 +204,7 @@ bool send_x_report(enum packet_type_e packet_type, uint8_t instance,
                    uint8_t report_id, uint8_t const *report, uint8_t len);
 // utils.c
 uint8_t calc_checksum(const uint8_t *data, int length);
+void set_tud_connected(bool connected);
 bool verify_checksum(const uart_packet_t *packet);
 // stdio.h
 int printf(const char *format, ...);

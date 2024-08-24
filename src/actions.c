@@ -124,7 +124,7 @@ void send_suspend_pc_report(uart_packet_t *packet, device_t *state) {
     send_value(global_state.active_output, OUTPUT_SELECT_MSG);
     restore_leds();
   }
-  global_state.tud_connected = false;
+  set_tud_connected(false);
 }
 
 void set_keyboard_leds(void) {
