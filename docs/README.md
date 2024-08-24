@@ -1,5 +1,14 @@
 # [DeskHopL](../README.md) > [Docs](#)
 
+## Shortcuts
+
+- `CAPS LOCK` jumps to the next PC
+- `RIGHT ALT + RIGHT SHIFT + L` locks both screens
+- `RIGHT ALT + RIGHT SHIFT + S` suspends both PCs
+- `RIGHT ALT + RIGHT SHIFT + D` enables debug mode\*
+
+\*the output will be shown on the `UART1 TX` pin.
+
 ## GPIO/Pins
 
 ### PICO A
@@ -23,6 +32,12 @@
 | UART0 TX    | 16   |          |
 | UART0 RX    | 17   |          |
 | LED         | 25   |          |
+
+## Suspending macOS
+
+You can suspend your Mac with an Apple Keyboard by pressing `Option + Command + Media Eject`.
+The Media Eject key is part of the consumer control descriptor, while Option & Command are included in the keyboard. If you send both reports properly, macOS will suspend.
+But we need to make sure no other reports arrive on the Mac until it really has suspended. Otherwise it will just wake up again.
 
 ## Further links
 
