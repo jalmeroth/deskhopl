@@ -17,6 +17,16 @@
 
 #include "main.h"
 
+void enable_debug(void) {
+  send_value(1, ENABLE_DEBUG_MSG);
+  _enable_debug();
+}
+
+void _enable_debug(void) {
+  stdio_uart_init_full(UART_ONE, UART_ONE_BAUD_RATE, UART_ONE_TX_PIN,
+                       UART_ONE_RX_PIN);
+}
+
 /* This key combo locks both outputs simultaneously */
 void lock_screen(void) {
   send_value(1, LOCK_SCREEN_MSG);

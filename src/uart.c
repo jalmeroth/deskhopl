@@ -57,6 +57,7 @@ const uart_handler_t uart_handler[] = {
     {.type = OUTPUT_SELECT_MSG, .handler = handle_uart_output_select_msg},
     {.type = LOCK_SCREEN_MSG, .handler = send_lock_screen_report},
     {.type = SUSPEND_PC_MSG, .handler = send_suspend_pc_report},
+    {.type = ENABLE_DEBUG_MSG, .handler = handle_uart_enable_debug_msg},
     // {.type = FIRMWARE_UPGRADE_MSG, .handler = handle_fw_upgrade_msg},
     // {.type = MOUSE_ZOOM_MSG, .handler = handle_mouse_zoom_msg},
     // {.type = KBD_SET_REPORT_MSG, .handler = handle_set_report_msg},

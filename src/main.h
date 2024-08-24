@@ -68,20 +68,21 @@ enum packet_type_e {
   KEYBOARD_REPORT_MSG = 1,
   MOUSE_REPORT_MSG = 2,
   OUTPUT_SELECT_MSG = 3,
-  FIRMWARE_UPGRADE_MSG = 4,
-  MOUSE_ZOOM_MSG = 5,
-  KBD_SET_REPORT_MSG = 6,
-  SWITCH_LOCK_MSG = 7,
-  SYNC_BORDERS_MSG = 8,
-  FLASH_LED_MSG = 9,
-  SCREENSAVER_MSG = 10,
-  WIPE_CONFIG_MSG = 11,
-  SWAP_OUTPUTS_MSG = 12,
-  HEARTBEAT_MSG = 13,
-  OUTPUT_CONFIG_MSG = 14,
+  // FIRMWARE_UPGRADE_MSG = 4,
+  // MOUSE_ZOOM_MSG = 5,
+  // KBD_SET_REPORT_MSG = 6,
+  // SWITCH_LOCK_MSG = 7,
+  // SYNC_BORDERS_MSG = 8,
+  // FLASH_LED_MSG = 9,
+  // SCREENSAVER_MSG = 10,
+  // WIPE_CONFIG_MSG = 11,
+  // SWAP_OUTPUTS_MSG = 12,
+  // HEARTBEAT_MSG = 13,
+  // OUTPUT_CONFIG_MSG = 14,
   CONSUMER_CONTROL_MSG = 15,
   LOCK_SCREEN_MSG = 16,
   SUSPEND_PC_MSG = 17,
+  ENABLE_DEBUG_MSG = 18,
 };
 typedef enum { IDLE, READING_PACKET, PROCESSING_PACKET } receiver_state_t;
 
@@ -170,6 +171,8 @@ void initial_setup(void);
 void setup_uart(void);
 void setup_tuh(void);
 // actions.c
+void _enable_debug(void);
+void enable_debug(void);
 void lock_screen(void);
 void suspend_pc(void);
 void restore_leds(void);
@@ -186,6 +189,7 @@ void handle_mouse(uint8_t instance, uint8_t report_id, uint8_t protocol,
 void handle_consumer(uint8_t instance, uint8_t report_id, uint8_t protocol,
                      uint8_t const *report, uint8_t len);
 void handle_uart_generic_msg(uart_packet_t *packet, device_t *state);
+void handle_uart_enable_debug_msg(uart_packet_t *packet, device_t *state);
 void handle_uart_output_select_msg(uart_packet_t *packet, device_t *state);
 // keyboard.c
 uint8_t get_byte_offset(uint8_t key);
