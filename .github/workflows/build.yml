@@ -1,0 +1,53 @@
+name: build
+on:
+  push:
+    paths:
+      - "src/**"
+  workflow_call:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: "deskhopl"
+
+      - uses: actions/checkout@v4
+        name: Checkout pico-sdk
+        with:
+          repository: "raspberrypi/pico-sdk"
+          path: "pico-sdk"
+          submodules: "true"
+
+      - uses: actions/checkout@v4
+        name: Checkout tinyusb
+        with:
+          repository: "hathach/tinyusb"
+          path: "tinyusb"
+
+      - uses: actions/checkout@v4
+        name: Checkout pico-pio-usb
+        with:
+          repository: "sekigon-gonnoc/Pico-PIO-USB"
+          path: "pico-pio-usb"
+
+      - name: Install tooling
+        run: |
+          sudo apt update
+          sudo apt install cmake gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib
+
+      - name: Build
+        run: |
+          export PICO_PIO_USB_PATH="${PWD}/pico-pio-usb/src"
+          export PICO_SDK_PATH="${PWD}/pico-sdk"
+          export PICO_TINYUSB_PATH="${PWD}/tinyusb"
+
+          mkdir -p deskhopl/src/build
+          cd deskhopl/src/build
+          cmake ..
+          make
+
+      - uses: actions/upload-artifact@v4
+        with:
+          path: deskhopl/src/build/*.uf2

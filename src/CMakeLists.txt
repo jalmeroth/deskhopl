@@ -97,7 +97,7 @@ foreach(board_role RANGE 0 1)
     )
 
     # create map/bin/hex/uf2 file etc.
-    # pico_add_extra_outputs(${binary})
+    pico_add_extra_outputs(${binary})
 
     target_link_options(${binary} PRIVATE
       -Xlinker
