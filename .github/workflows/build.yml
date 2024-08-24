@@ -18,7 +18,6 @@ jobs:
         with:
           repository: "raspberrypi/pico-sdk"
           path: "pico-sdk"
-          submodules: "true"
 
       - uses: actions/checkout@v4
         name: Checkout tinyusb
