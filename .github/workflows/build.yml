@@ -4,6 +4,7 @@ on:
     paths:
       - "src/**"
   workflow_call:
+  workflow_dispatch:
 
 jobs:
   build:
