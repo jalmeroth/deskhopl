@@ -25,6 +25,7 @@
 #include "pio_usb.h"
 #include "tusb.h"
 #include "tusb_descriptors.h"
+#include "user_config.h"
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -35,8 +36,6 @@
 #define PICO_A 0
 #define PICO_B 1
 #define GPIO_LED_PIN 25 // LED is connected to pin 25 on a PICO
-#define SCREENSAVER_ENABLED 1
-#define SCREENSAVER_IDLE_TIME (240 * 1000000)
 
 // UART CONFIG
 #define UART_ZERO uart0
