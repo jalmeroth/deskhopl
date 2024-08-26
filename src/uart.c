@@ -99,7 +99,7 @@ void handle_idle_state(uint8_t *raw_packet, device_t *state) {
   /* If we found 0xAA 0x55, we're in sync and can move on to read/process the
    * packet */
   if (raw_packet[0] == START1 && raw_packet[1] == START2) {
-    state->receiver_state = READING_PACKET;
+    state->uart_state = READING_PACKET;
   }
 }
 
@@ -112,7 +112,7 @@ void handle_reading_state(uint8_t *raw_packet, device_t *state, int *count) {
 
   /* Check if a complete packet is received */
   if (*count >= PACKET_LENGTH) {
-    state->receiver_state = PROCESSING_PACKET;
+    state->uart_state = PROCESSING_PACKET;
   }
 }
 
@@ -121,7 +121,7 @@ void handle_reading_state(uint8_t *raw_packet, device_t *state, int *count) {
 void handle_processing_state(uart_packet_t *packet, device_t *state,
                              int *count) {
   process_packet(packet, state);
-  state->receiver_state = IDLE;
+  state->uart_state = IDLE;
   *count = 0;
 }
 
@@ -130,7 +130,7 @@ void receive_char(uart_packet_t *packet, device_t *state) {
   uint8_t *raw_packet = (uint8_t *)packet;
   static int count = 0;
 
-  switch (state->receiver_state) {
+  switch (state->uart_state) {
   case IDLE:
     handle_idle_state(raw_packet, state);
     break;

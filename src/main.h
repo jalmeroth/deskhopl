@@ -83,14 +83,14 @@ enum packet_type_e {
   SUSPEND_PC_MSG = 17,
   ENABLE_DEBUG_MSG = 18,
 };
-typedef enum { IDLE, READING_PACKET, PROCESSING_PACKET } receiver_state_t;
+typedef enum { IDLE, READING_PACKET, PROCESSING_PACKET } uart_state_t;
 
 typedef struct {
   uint8_t active_output;  // Currently selected output (0 = A, 1 = B)
   uint64_t last_activity; // Timestamp of the last input activity
   bool tud_connected;     // Are we connected to the host
-  receiver_state_t
-      receiver_state; // Storing the state for the simple receiver state machine
+  uart_state_t
+      uart_state; // Storing the state for the simple receiver state machine
 } device_t;
 
 typedef void (*action_handler_t)();
