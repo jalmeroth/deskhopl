@@ -2,7 +2,7 @@
 
 ## Shortcuts
 
-- `CAPS LOCK` jumps to the next PC
+- `CAPS_LOCK` jumps to the next PC
 - `RIGHT ALT + RIGHT SHIFT + L` locks both screens
 - `RIGHT ALT + RIGHT SHIFT + S` suspends both PCs
 - `RIGHT ALT + RIGHT SHIFT + D` enables debug mode\*
