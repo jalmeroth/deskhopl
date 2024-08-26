@@ -54,7 +54,7 @@ void handle_mouse(uint8_t instance, uint8_t report_id, uint8_t protocol,
                   uint8_t const *report, uint8_t len) {
   (void)protocol;
   if (report[0] == MOUSE_BUTTON_MIDDLE) {
-    switch_output();
+    toggle_output();
   } else {
     send_x_report(MOUSE_REPORT_MSG, instance, report_id, report, len);
   }
@@ -81,7 +81,7 @@ void handle_uart_output_select_msg(uart_packet_t *packet, device_t *state) {
   if (state->active_output == BOARD_ROLE && !state->tud_connected) {
     tud_remote_wakeup();
   }
-  set_onboard_led();
+  set_onboard_led(state);
 }
 
 void handle_uart_enable_debug_msg(uart_packet_t *packet, device_t *state) {

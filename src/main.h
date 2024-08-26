@@ -18,6 +18,7 @@
 #pragma once
 // INCLUDES
 #include "hardware/clocks.h"
+#include "hardware/watchdog.h"
 #include "pico/binary_info.h"
 #include "pico/bootrom.h"
 #include "pico/multicore.h"
@@ -35,8 +36,11 @@
 // BOARD CONFIG
 #define PICO_A 0
 #define PICO_B 1
-#define NUM_DEVICES 2   // PICO_A + PICO_B
-#define GPIO_LED_PIN 25 // LED is connected to pin 25 on a PICO
+#define NUM_DEVICES 2          // PICO_A + PICO_B
+#define GPIO_LED_PIN 25        // LED is connected to pin 25 on a PICO
+#define WATCHDOG_DELAY_MS 500  // milliseconds
+#define WATCHDOG_PAUSE_DEBUG 1 // Pause watchdog on debug
+#define CORE1_TIMEOUT_US WATCHDOG_DELAY_MS * 1000 // Convert to microseconds
 
 // UART CONFIG
 #define UART_ZERO uart0
@@ -96,9 +100,11 @@ typedef struct {
 } device_config_t;
 
 typedef struct {
-  uint8_t active_output;  // Currently selected output (0 = A, 1 = B)
-  uint64_t last_activity; // Timestamp of the last input activity
-  bool tud_connected;     // Are we connected to the host
+  uint8_t active_output;         // Currently selected output (0 = A, 1 = B)
+  uint64_t core1_last_loop_pass; // when core1 loop went through last
+  uint64_t last_activity;        // Timestamp of the last input activity
+  bool tud_connected;            // Are we connected to the host
+  bool reboot_requested;         // Are we gonna reboot soon
   uart_state_t
       uart_state; // Storing the state for the simple receiver state machine
   device_config_t device_config[NUM_DEVICES];
@@ -177,7 +183,7 @@ typedef struct {
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
 // setup.c
 void core1_main(void);
-void initial_setup(void);
+void initial_setup(device_t *state);
 void setup_uart(void);
 void setup_tuh(void);
 // actions.c
@@ -185,12 +191,12 @@ void _enable_debug(void);
 void enable_debug(void);
 void lock_screen(void);
 void suspend_pc(void);
-void restore_leds(void);
-void screensaver_task(void);
+void screensaver_task(device_t *state);
 void send_suspend_pc_report(uart_packet_t *packet, device_t *state);
 void send_lock_screen_report(uart_packet_t *packet, device_t *state);
-void set_onboard_led(void);
-void switch_output(void);
+void set_onboard_led(device_t *state);
+void switch_output_a(device_t *state);
+void toggle_output(void);
 // handlers.c
 void handle_keyboard(uint8_t instance, uint8_t report_id, uint8_t protocol,
                      uint8_t const *report, uint8_t len);
@@ -217,6 +223,7 @@ bool send_x_report(enum packet_type_e packet_type, uint8_t instance,
                    uint8_t report_id, uint8_t const *report, uint8_t len);
 // utils.c
 uint8_t calc_checksum(const uint8_t *data, int length);
+void kick_watchdog_task(device_t *state);
 void set_tud_connected(bool connected);
 bool verify_checksum(const uart_packet_t *packet);
 // stdio.h

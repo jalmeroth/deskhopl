@@ -38,7 +38,8 @@ void tuh_hid_report_received_cb(uint8_t dev_addr, uint8_t instance,
   printf("h[report] dev_addr: %d instance: %d protocol: %d\r\n", dev_addr,
          instance, protocol);
 
-  uint8_t report_id = 0, usage_page = 0, usage = 0;
+  uint8_t report_id = 0, usage = 0;
+  uint16_t usage_page = 0;
 
   if (protocol == HID_PROTOCOL_REPORT) {
     // do we have more then one report
@@ -79,12 +80,17 @@ void tuh_hid_report_received_cb(uint8_t dev_addr, uint8_t instance,
     if (usage == HID_USAGE_CONSUMER_CONTROL) {
       handle_consumer(instance, report_id, protocol, report, len);
     }
+  } else if (usage_page == HID_USAGE_PAGE_VENDOR) {
+    // usage 0x01 Vendor
+    // usage 0x02 Vendor
   }
   tuh_hid_receive_report(dev_addr, instance);
 }
 
 void tuh_hid_umount_cb(uint8_t dev_addr, uint8_t instance) {
   printf("h[umount] dev_addr: %d, instance: %d\r\n", dev_addr, instance);
+  // https://github.com/hrvach/deskhop/issues/36
+  global_state.reboot_requested = true;
 }
 
 void tuh_hid_mount_cb(uint8_t dev_addr, uint8_t instance,

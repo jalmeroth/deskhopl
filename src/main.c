@@ -30,18 +30,25 @@ void core1_main() {
     if (tuh_inited()) {
       tuh_task();
     }
+    device->core1_last_loop_pass = time_us_64();
     receive_char(&in_packet, device);
   }
 }
 
 int main() {
 
-  initial_setup();
+  initial_setup(device);
+
   tud_init(BOARD_TUD_RHPORT);
+
+  watchdog_enable(WATCHDOG_DELAY_MS, WATCHDOG_PAUSE_DEBUG);
+
   while (true) {
+    kick_watchdog_task(device);
     // USB device task, needs to run as often as possible
     tud_task();
-    screensaver_task();
+
+    screensaver_task(device);
 
     stdio_flush();
     sleep_us(10);

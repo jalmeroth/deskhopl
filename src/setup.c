@@ -46,22 +46,22 @@ void setup_tuh(void) {
   tuh_configure(BOARD_TUH_RHPORT, TUH_CFGID_RPI_PIO_USB_CONFIGURATION, &config);
 
   // Initialize and configure TinyUSB Host
-  tuh_init(1);
+  tuh_init(BOARD_TUH_RHPORT);
 
   // put pin config into binary_info
   bi_decl(bi_1pin_with_name(PIO_USB_DP_PIN_DEFAULT, "USB DP"));
 }
 
-void set_user_config(void) {
+void set_user_config(device_t *state) {
   const char *os_type_str[] = {"undefined", "Linux", "macOS"};
 
-  global_state.device_config[PICO_A].os = PICO_A_OS;
-  global_state.device_config[PICO_B].os = PICO_B_OS;
+  state->device_config[PICO_A].os = PICO_A_OS;
+  state->device_config[PICO_B].os = PICO_B_OS;
   printf("PICO_%s OS: %s\r\n", BOARD_ROLE ? "B" : "A",
-         os_type_str[global_state.device_config[BOARD_ROLE].os]);
+         os_type_str[state->device_config[BOARD_ROLE].os]);
 }
 
-void initial_setup(void) {
+void initial_setup(device_t *state) {
   // default 125MHz is not appropreate. Sysclock should be multiple of 12MHz.
   set_sys_clock_khz(120000, true);
 
@@ -80,6 +80,7 @@ void initial_setup(void) {
   // all USB task run in core1
   multicore_launch_core1(core1_main);
 
-  set_user_config();
-  restore_leds();
+  set_user_config(state);
+
+  switch_output_a(state);
 }

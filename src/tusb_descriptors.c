@@ -99,7 +99,7 @@ uint8_t const desc_configuration[] = {
     // Config number, interface count, string index, total length, attribute,
     // power in mA
     TUD_CONFIG_DESCRIPTOR(1, ITF_NUM_TOTAL, 4, CONFIG_TOTAL_LEN,
-                          TUSB_DESC_CONFIG_ATT_REMOTE_WAKEUP, 98),
+                          TUSB_DESC_CONFIG_ATT_REMOTE_WAKEUP, 500),
 
     // Interface number, string index(usb.iInterface), protocol, report
     // descriptor len, EP In

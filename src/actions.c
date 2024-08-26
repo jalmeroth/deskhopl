@@ -33,16 +33,14 @@ void lock_screen(void) {
   send_lock_screen_report(NULL, NULL);
 }
 
-void restore_leds(void) { set_onboard_led(); }
-
 void suspend_pc(void) {
   send_value(1, SUSPEND_PC_MSG);
   send_suspend_pc_report(NULL, NULL);
 }
 
-void screensaver_task(void) {
+void screensaver_task(device_t *state) {
   const unsigned int mouse_move_delay = 1000000;
-  uint64_t inactivity_period = time_us_64() - global_state.last_activity;
+  uint64_t inactivity_period = time_us_64() - state->last_activity;
 
   static mouse_report_t report = {0};
   static int last_pointer_move = 0;
@@ -52,7 +50,7 @@ void screensaver_task(void) {
   if (!SCREENSAVER_ENABLED)
     return;
 
-  if (!global_state.tud_connected)
+  if (!state->tud_connected)
     return;
 
   /* System is still not idle for long enough to activate or we've been running
@@ -76,6 +74,7 @@ void screensaver_task(void) {
 
 void send_lock_screen_report(uart_packet_t *packet, device_t *state) {
   (void)packet;
+  (void)state;
 
   keyboard_report_t lock_report = {0}, release_keys = {0};
   uint8_t off, pos;
@@ -134,20 +133,24 @@ void send_suspend_pc_report(uart_packet_t *packet, device_t *state) {
                     sizeof(consumer_report_t));
     // we need to make sure MACOS that is not receiving
     // any reports until our USB device gets suspended
-    global_state.active_output = PICO_A;
-    send_value(global_state.active_output, OUTPUT_SELECT_MSG);
-    restore_leds();
+    switch_output_a(state);
   }
   set_tud_connected(false);
 }
 
-void set_onboard_led(void) {
-  uint8_t new_led_state = (global_state.active_output == BOARD_ROLE);
+void set_onboard_led(device_t *state) {
+  uint8_t new_led_state = (state->active_output == BOARD_ROLE);
   gpio_put(GPIO_LED_PIN, new_led_state);
 }
 
-void switch_output(void) {
+void switch_output_a(device_t *state) {
+  state->active_output = PICO_A;
+  send_value(state->active_output, OUTPUT_SELECT_MSG);
+  set_onboard_led(state);
+}
+
+void toggle_output(void) {
   global_state.active_output ^= 1;
   send_value(global_state.active_output, OUTPUT_SELECT_MSG);
-  restore_leds();
+  set_onboard_led(&global_state);
 }
