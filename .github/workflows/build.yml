@@ -19,6 +19,7 @@ jobs:
         with:
           repository: "raspberrypi/pico-sdk"
           path: "pico-sdk"
+          ref: "refs/tags/2.0.0"
 
       - uses: actions/checkout@v4
         name: Checkout tinyusb
@@ -31,6 +32,7 @@ jobs:
         with:
           repository: "sekigon-gonnoc/Pico-PIO-USB"
           path: "pico-pio-usb"
+          ref: "refs/tags/0.6.1"
 
       - name: Install tooling
         run: |
