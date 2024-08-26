@@ -35,6 +35,7 @@
 // BOARD CONFIG
 #define PICO_A 0
 #define PICO_B 1
+#define NUM_DEVICES 2   // PICO_A + PICO_B
 #define GPIO_LED_PIN 25 // LED is connected to pin 25 on a PICO
 
 // UART CONFIG
@@ -85,12 +86,22 @@ enum packet_type_e {
 };
 typedef enum { IDLE, READING_PACKET, PROCESSING_PACKET } uart_state_t;
 
+enum os_type_e {
+  LINUX = 1,
+  MACOS,
+};
+
+typedef struct {
+  uint8_t os;
+} device_config_t;
+
 typedef struct {
   uint8_t active_output;  // Currently selected output (0 = A, 1 = B)
   uint64_t last_activity; // Timestamp of the last input activity
   bool tud_connected;     // Are we connected to the host
   uart_state_t
       uart_state; // Storing the state for the simple receiver state machine
+  device_config_t device_config[NUM_DEVICES];
 } device_t;
 
 typedef void (*action_handler_t)();

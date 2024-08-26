@@ -52,6 +52,15 @@ void setup_tuh(void) {
   bi_decl(bi_1pin_with_name(PIO_USB_DP_PIN_DEFAULT, "USB DP"));
 }
 
+void set_user_config(void) {
+  const char *os_type_str[] = {"undefined", "Linux", "macOS"};
+
+  global_state.device_config[PICO_A].os = PICO_A_OS;
+  global_state.device_config[PICO_B].os = PICO_B_OS;
+  printf("PICO_%s OS: %s\r\n", BOARD_ROLE ? "B" : "A",
+         os_type_str[global_state.device_config[BOARD_ROLE].os]);
+}
+
 void initial_setup(void) {
   // default 125MHz is not appropreate. Sysclock should be multiple of 12MHz.
   set_sys_clock_khz(120000, true);
@@ -71,5 +80,6 @@ void initial_setup(void) {
   // all USB task run in core1
   multicore_launch_core1(core1_main);
 
+  set_user_config();
   restore_leds();
 }
