@@ -33,6 +33,14 @@ void lock_screen(void) {
   send_lock_screen_report(NULL, NULL);
 }
 
+void request_reboot() {
+  if (global_state.active_output == BOARD_ROLE) {
+    global_state.reboot_requested = true;
+  } else {
+    send_value(1, REQUEST_REBOOT_MSG);
+  }
+}
+
 void suspend_pc(void) {
   send_value(1, SUSPEND_PC_MSG);
   send_suspend_pc_report(NULL, NULL);

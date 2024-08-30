@@ -6,6 +6,7 @@
 - `RIGHT ALT + RIGHT SHIFT + L` locks both screens
 - `RIGHT ALT + RIGHT SHIFT + S` suspends both PCs
 - `RIGHT ALT + RIGHT SHIFT + D` enables debug mode\*
+- `RIGHT ALT + RIGHT SHIFT + R` request to reboot active board
 
 \*the output will be shown on the `UART1 TX` pin.
 

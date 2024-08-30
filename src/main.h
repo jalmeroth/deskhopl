@@ -87,6 +87,7 @@ enum packet_type_e {
   LOCK_SCREEN_MSG = 16,
   SUSPEND_PC_MSG = 17,
   ENABLE_DEBUG_MSG = 18,
+  REQUEST_REBOOT_MSG = 19,
 };
 typedef enum { IDLE, READING_PACKET, PROCESSING_PACKET } uart_state_t;
 
@@ -190,11 +191,12 @@ void setup_tuh(void);
 void _enable_debug(void);
 void enable_debug(void);
 void lock_screen(void);
-void suspend_pc(void);
+void request_reboot(void);
 void screensaver_task(device_t *state);
-void send_suspend_pc_report(uart_packet_t *packet, device_t *state);
 void send_lock_screen_report(uart_packet_t *packet, device_t *state);
+void send_suspend_pc_report(uart_packet_t *packet, device_t *state);
 void set_onboard_led(device_t *state);
+void suspend_pc(void);
 void switch_output_a(device_t *state);
 void toggle_output(void);
 // handlers.c
@@ -204,9 +206,10 @@ void handle_mouse(uint8_t instance, uint8_t report_id, uint8_t protocol,
                   uint8_t const *report, uint8_t len);
 void handle_consumer(uint8_t instance, uint8_t report_id, uint8_t protocol,
                      uint8_t const *report, uint8_t len);
-void handle_uart_generic_msg(uart_packet_t *packet, device_t *state);
 void handle_uart_enable_debug_msg(uart_packet_t *packet, device_t *state);
+void handle_uart_generic_msg(uart_packet_t *packet, device_t *state);
 void handle_uart_output_select_msg(uart_packet_t *packet, device_t *state);
+void handle_uart_request_reboot_msg(uart_packet_t *packet, device_t *state);
 // keyboard.c
 uint8_t get_byte_offset(uint8_t key);
 uint8_t get_pos_in_byte(uint8_t key);

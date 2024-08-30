@@ -89,3 +89,9 @@ void handle_uart_enable_debug_msg(uart_packet_t *packet, device_t *state) {
   (void)state;
   _enable_debug();
 }
+
+void handle_uart_request_reboot_msg(uart_packet_t *packet, device_t *state) {
+  (void)packet;
+  (void)state;
+  request_reboot();
+}

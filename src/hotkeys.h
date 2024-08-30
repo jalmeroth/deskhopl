@@ -39,4 +39,9 @@ hotkey_combo_t hotkeys[] = {
      .key_count = 1,
      .pass_to_os = false,
      .action_handler = &enable_debug},
+    {.modifier = KEYBOARD_MODIFIER_RIGHTALT | KEYBOARD_MODIFIER_RIGHTSHIFT,
+     .keys = {HID_KEY_R},
+     .key_count = 1,
+     .pass_to_os = false,
+     .action_handler = &request_reboot},
 };
