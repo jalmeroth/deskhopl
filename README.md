@@ -47,3 +47,9 @@ DeskHopL was tested with the following devices:
 
 - Logitech MX Mechanical
 - Logitech MX Master S3
+
+Hub-Devices are currently not supported, see issues:
+
+- <https://github.com/hathach/tinyusb/issues/1883>
+- <https://github.com/hathach/tinyusb/issues/2195>
+- <https://github.com/hathach/tinyusb/issues/2212>
