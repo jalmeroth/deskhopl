@@ -1,10 +1,22 @@
 cmake_minimum_required(VERSION 3.13)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+option( DH_DEBUG "Enable Debug builds" OFF )
+option( DH_PICO_2 "Enable building for Pico 2 boards" OFF )
+
 # define some vars required for pico-sdk
-set(PICO_BOARD "pico")
-set(PICO_COMPILER "pico_arm_gcc")
-set(PICO_PLATFORM "rp2040")
+if(NOT DH_PICO_2)
+  set(PICO_BOARD "pico")
+  set(PICO_COMPILER "pico_arm_cortex_m0plus_gcc")
+  set(PICO_PLATFORM "rp2040")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mcpu=cortex-m0plus -mtune=cortex-m0plus")
+else()
+  set(PICO_BOARD "pico2")
+  set(PICO_COMPILER "pico_arm_cortex_m33_gcc")
+  set(PICO_PLATFORM "rp2350-arm-s")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mcpu=cortex-m33 -mtune=cortex-m33")
+endif()
+
 set(PICO_PIO_USB_PATH "$ENV{PICO_PIO_USB_PATH}/src")
 set(PICO_SDK_PATH $ENV{PICO_SDK_PATH})
 set(PICO_TINYUSB_PATH $ENV{PICO_TINYUSB_PATH})
@@ -13,19 +25,16 @@ set(PICO_TINYUSB_PATH $ENV{PICO_TINYUSB_PATH})
 set(CMAKE_BUILD_TYPE "Release")
 # set(CMAKE_BUILD_TYPE "Debug")
 # set(LOG 3)
-option( DH_DEBUG "Enable Debug builds" OFF )
 
-# FIXME: if clang is installed, discovery of compiler fails on some systems
 set(CMAKE_TOOLCHAIN_FILE "${PICO_SDK_PATH}/cmake/preload/toolchains/${PICO_COMPILER}.cmake")
 
 # initialize the SDK based on PICO_SDK_PATH
 # note: this must happen before project()
 include(${PICO_SDK_PATH}/external/pico_sdk_import.cmake)
-set(CMAKE_C_FLAGS
-    "${CMAKE_C_FLAGS} -Ofast -Wall -mcpu=cortex-m0plus -mtune=cortex-m0plus -funroll-loops"
-)
+
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Ofast -Wall -funroll-loops")
 if(DH_DEBUG)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DDH_DEBUG=1")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DDH_DEBUG=1")
 endif()
 message(CMAKE_C_FLAGS="${CMAKE_C_FLAGS}")
 

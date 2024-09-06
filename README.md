@@ -36,7 +36,10 @@ cmake ..
 make
 ```
 
-_Note:_ the cmake option `-DDH_DEBUG=1` enables stdio-output on uart1
+#### CMake Options
+
+- `DH_DEBUG`: enables stdio-output on uart1
+- `DH_PICO_2`: enables building for PICO 2 boards
 
 ## Device support
 
