@@ -26,6 +26,7 @@ jobs:
         with:
           repository: "hathach/tinyusb"
           path: "tinyusb"
+          ref: "refs/tags/0.17.0"
 
       - uses: actions/checkout@v4
         name: Checkout pico-pio-usb
