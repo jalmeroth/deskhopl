@@ -1,6 +1,6 @@
 # [DeskHopL](#)
 
-This project sprung by trying to make [hrvach](https://github.com/hrvach)s awesome project [deskhop](https://github.com/hrvach/deskhop) compatible with [my Logitech devices](https://github.com/hrvach/deskhop/issues/47).
+This project sprung by trying to make [hrvachs](https://github.com/hrvach) awesome project [deskhop](https://github.com/hrvach/deskhop) compatible with [my Logitech devices](https://github.com/hrvach/deskhop/issues/47).
 This project is heavily based on his work, therefore all the credits belong to him and the deskhop community.
 
 I started this project from scratch and just copied the very least code that is need for my opinionated setup.
@@ -14,6 +14,7 @@ I started this project from scratch and just copied the very least code that is 
 - HID device descriptors compatible with Logitech devices
 - support for "Suspend both PCs" via shortcut (Linux/macOS)
 - support for "Screensaver mode" by jiggling the mouse just one pixel
+- works with Raspberry Pi Pico and Pico 2
 
 \*since we're keeping the relative mouse, moving your mouse to the next PC won't work. You have to press the `CAPS_LOCK` key to hop to the next PC.
 
@@ -30,8 +31,8 @@ _Note:_ don't forget to export `PICO_PIO_USB_PATH`, `PICO_TINYUSB_PATH` and `PIC
 Make sure to have all requirements installed as described by [pico-sdk](https://github.com/raspberrypi/pico-sdk).
 
 ```sh
-cd src
-mkdir build
+mkdir -p ./src/build
+cd ./src/build
 cmake ..
 make
 ```
