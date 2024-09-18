@@ -76,6 +76,8 @@ void handle_uart_generic_msg(uart_packet_t *packet, device_t *state) {
 }
 
 void handle_uart_output_select_msg(uart_packet_t *packet, device_t *state) {
+  release_all_keys();
+
   state->active_output = packet->data[0];
   // we are on duty but we are not connected => try remote wakeup
   if (state->active_output == BOARD_ROLE && !state->tud_connected) {

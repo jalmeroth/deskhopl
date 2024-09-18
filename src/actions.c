@@ -161,4 +161,5 @@ void toggle_output(void) {
   global_state.active_output ^= 1;
   send_value(global_state.active_output, OUTPUT_SELECT_MSG);
   set_onboard_led(&global_state);
+  release_all_keys();
 }

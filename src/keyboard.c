@@ -85,3 +85,10 @@ bool process_keyboard_report(uint8_t const *report, uint8_t len) {
 
   return pass_to_os;
 }
+
+bool release_all_keys(void) {
+  // release keys if any were pressed
+  keyboard_report_t release_keys = {0};
+  return send_tud_report(ITF_NUM_HID_KB, REPORT_ID_KEYBOARD,
+                         (uint8_t *)&release_keys, sizeof(keyboard_report_t));
+}

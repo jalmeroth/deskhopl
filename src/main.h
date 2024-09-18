@@ -214,6 +214,7 @@ void handle_uart_request_reboot_msg(uart_packet_t *packet, device_t *state);
 uint8_t get_byte_offset(uint8_t key);
 uint8_t get_pos_in_byte(uint8_t key);
 bool process_keyboard_report(uint8_t const *report, uint8_t len);
+bool release_all_keys(void);
 // uart.c
 void receive_char(uart_packet_t *packet, device_t *state);
 void send_packet(uint8_t instance, uint8_t report_id, const uint8_t *data,
