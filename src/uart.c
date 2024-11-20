@@ -22,20 +22,21 @@
  * ================================================== */
 
 void uart_send_packet(uint8_t interface, uint8_t report_id, const uint8_t *data,
-                      enum packet_type_e packet_type, int length) {
+                      enum packet_type_e packet_type, uint8_t report_len) {
   uint8_t raw_packet[RAW_PACKET_LENGTH] = {[0] = START1,
                                            [1] = START2,
                                            [2] = packet_type,
                                            [3] = interface,
                                            [4] = report_id,
-                                           [5] = length,
+                                           [5] = report_len,
                                            /* [6-21] is data, defaults to 0 */
-                                           [22] = calc_checksum(data, length)};
+                                           [22] =
+                                               calc_checksum(data, report_len)};
 
-  if (length > 0)
+  if (report_len > 0)
     memcpy(&raw_packet[START_LENGTH + TYPE_LENGTH + INTERFACE_LENGTH +
                        REPORT_ID_LENGTH + REPORT_LEN_LENGTH],
-           data, length);
+           data, report_len);
 
   /* Packets are short, fixed length, high speed and there is no flow control to
    * block this */
