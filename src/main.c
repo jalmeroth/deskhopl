@@ -18,7 +18,7 @@
 #include "main.h"
 
 device_t global_state = {0};
-device_t *device = &global_state;
+device_t *state = &global_state;
 
 void core1_main() {
   sleep_ms(10);
@@ -30,25 +30,25 @@ void core1_main() {
     if (tuh_inited()) {
       tuh_task();
     }
-    device->core1_last_loop_pass = time_us_64();
-    receive_char(&in_packet, device);
+    state->core1_last_loop_pass = time_us_64();
+    receive_char(&in_packet, state);
   }
 }
 
 int main() {
 
-  initial_setup(device);
+  initial_setup(state);
 
   tud_init(BOARD_TUD_RHPORT);
 
   watchdog_enable(WATCHDOG_DELAY_MS, WATCHDOG_PAUSE_DEBUG);
 
   while (true) {
-    kick_watchdog_task(device);
+    kick_watchdog_task(state);
     // USB device task, needs to run as often as possible
     tud_task();
 
-    screensaver_task(device);
+    screensaver_task(state);
 
     stdio_flush();
     sleep_us(10);
