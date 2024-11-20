@@ -41,10 +41,10 @@ void tud_suspend_cb(bool remote_wakeup_en) {
 // Invoked when usb bus is resumed
 void tud_resume_cb(void) {
   printf("d[resume]\n");
-  if (global_state.device_config[BOARD_ROLE].os == MACOS) {
-    tud_deinit(BOARD_TUD_RHPORT);
-    tud_init(BOARD_TUD_RHPORT);
-  }
+  // if (global_state.device_config[BOARD_ROLE].os == MACOS) {
+  //   tud_deinit(BOARD_TUD_RHPORT);
+  //   tud_init(BOARD_TUD_RHPORT);
+  // }
   set_tud_connected(true);
 }
 
