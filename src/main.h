@@ -220,7 +220,7 @@ void receive_char(uart_packet_t *packet, device_t *state);
 void uart_send_packet(enum packet_type_e packet_type, uint8_t interface,
                       uint8_t report_id, uint8_t report_len,
                       const uint8_t *data);
-void uart_send_value(const uint8_t value, enum packet_type_e packet_type);
+void uart_send_value(enum packet_type_e packet_type, const uint8_t value);
 // usb.c
 bool send_tud_report(uint8_t instance, uint8_t report_id, uint8_t const *report,
                      uint8_t len);

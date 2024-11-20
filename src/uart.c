@@ -44,7 +44,7 @@ void uart_send_packet(enum packet_type_e packet_type, uint8_t interface,
   uart_write_blocking(UART_ZERO, raw_packet, RAW_PACKET_LENGTH);
 }
 
-void uart_send_value(const uint8_t value, enum packet_type_e packet_type) {
+void uart_send_value(enum packet_type_e packet_type, const uint8_t value) {
   const uint8_t data = value;
   uart_send_packet(packet_type, 0, 0, sizeof(uint8_t), &data);
 }
