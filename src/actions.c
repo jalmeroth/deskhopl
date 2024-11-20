@@ -74,7 +74,7 @@ void screensaver_task(device_t *state) {
   jitter = -jitter;
 
   /* Move mouse pointer */
-  send_tud_report(ITF_NUM_HID_MS, REPORT_ID_MOUSE, (uint8_t *)&report, 8);
+  send_tud_report(ITF_NUM_HID_MS, REPORT_ID_MOUSE, 8, (uint8_t *)&report);
 
   /* Update timer of the last pointer move */
   last_pointer_move = time_us_32();
@@ -103,10 +103,10 @@ void send_lock_screen_report(uart_packet_t *packet, device_t *state) {
     break;
   }
 
-  send_tud_report(ITF_NUM_HID_KB, REPORT_ID_KEYBOARD, (uint8_t *)&lock_report,
-                  sizeof(keyboard_report_t));
-  send_tud_report(ITF_NUM_HID_KB, REPORT_ID_KEYBOARD, (uint8_t *)&release_keys,
-                  sizeof(keyboard_report_t));
+  send_tud_report(ITF_NUM_HID_KB, REPORT_ID_KEYBOARD, sizeof(keyboard_report_t),
+                  (uint8_t *)&lock_report);
+  send_tud_report(ITF_NUM_HID_KB, REPORT_ID_KEYBOARD, sizeof(keyboard_report_t),
+                  (uint8_t *)&release_keys);
 }
 
 void send_suspend_pc_report(uart_packet_t *packet, device_t *state) {
@@ -131,14 +131,14 @@ void send_suspend_pc_report(uart_packet_t *packet, device_t *state) {
     break;
   }
 
-  send_tud_report(ITF_NUM_HID_KB, REPORT_ID_KEYBOARD,
-                  (uint8_t *)&suspend_report, sizeof(keyboard_report_t));
+  send_tud_report(ITF_NUM_HID_KB, REPORT_ID_KEYBOARD, sizeof(keyboard_report_t),
+                  (uint8_t *)&suspend_report);
 
   if (global_state.device_config[BOARD_ROLE].os == MACOS) {
     consumer_report_t eject_report = {0};
     eject_report.apple = 1 << 3; // Usage (Eject)
-    send_tud_report(ITF_NUM_HID_MS, 3, (uint8_t *)&eject_report,
-                    sizeof(consumer_report_t));
+    send_tud_report(ITF_NUM_HID_MS, 3, sizeof(consumer_report_t),
+                    (uint8_t *)&eject_report);
     // we need to make sure MACOS that is not receiving
     // any reports until our USB device gets suspended
     switch_output_a(state);

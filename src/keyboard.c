@@ -90,5 +90,5 @@ bool release_all_keys(void) {
   // release keys if any were pressed
   keyboard_report_t release_keys = {0};
   return send_tud_report(ITF_NUM_HID_KB, REPORT_ID_KEYBOARD,
-                         (uint8_t *)&release_keys, sizeof(keyboard_report_t));
+                         sizeof(keyboard_report_t), (uint8_t *)&release_keys);
 }
