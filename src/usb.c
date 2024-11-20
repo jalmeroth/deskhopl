@@ -21,8 +21,8 @@ bool send_tud_report(uint8_t instance, uint8_t report_id, uint8_t const *report,
 }
 
 bool send_x_report(enum packet_type_e packet_type, uint8_t interface,
-                   uint8_t report_id, uint8_t const *report,
-                   uint8_t report_len) {
+                   uint8_t report_id, uint8_t report_len,
+                   uint8_t const *report) {
   bool success = false;
 
   if (!report_len || report_len > PACKET_DATA_LENGTH) {

@@ -45,8 +45,8 @@ void handle_keyboard(uint8_t instance, uint8_t report_id, uint8_t protocol,
     len = 16;
   }
   if (process_keyboard_report(report, len)) {
-    send_x_report(KEYBOARD_REPORT_MSG, instance, REPORT_ID_KEYBOARD, report,
-                  len);
+    send_x_report(KEYBOARD_REPORT_MSG, instance, REPORT_ID_KEYBOARD, len,
+                  report);
   }
 }
 
@@ -56,7 +56,7 @@ void handle_mouse(uint8_t instance, uint8_t report_id, uint8_t protocol,
   if (report[0] == MOUSE_BUTTON_MIDDLE) {
     toggle_output();
   } else {
-    send_x_report(MOUSE_REPORT_MSG, instance, report_id, report, len);
+    send_x_report(MOUSE_REPORT_MSG, instance, report_id, len, report);
   }
 }
 
@@ -66,13 +66,13 @@ void handle_consumer(uint8_t instance, uint8_t report_id, uint8_t protocol,
   // Extend report with Apple media keys
   consumer_report_t *new_report = (consumer_report_t *)report;
   send_x_report(CONSUMER_CONTROL_MSG, instance, report_id,
-                (uint8_t *)new_report, sizeof(consumer_report_t));
+                sizeof(consumer_report_t), (uint8_t *)new_report);
 }
 
 void handle_uart_generic_msg(uart_packet_t *packet, device_t *state) {
   (void)state;
   send_x_report(packet->type, packet->interface, packet->report_id,
-                packet->data, packet->report_len);
+                packet->report_len, packet->data);
 }
 
 void handle_uart_output_select_msg(uart_packet_t *packet, device_t *state) {

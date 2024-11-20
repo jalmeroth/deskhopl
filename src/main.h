@@ -225,7 +225,8 @@ void uart_send_value(enum packet_type_e packet_type, const uint8_t value);
 bool send_tud_report(uint8_t instance, uint8_t report_id, uint8_t const *report,
                      uint8_t len);
 bool send_x_report(enum packet_type_e packet_type, uint8_t interface,
-                   uint8_t report_id, uint8_t const *report, uint8_t len);
+                   uint8_t report_id, uint8_t report_len,
+                   uint8_t const *report);
 // utils.c
 uint8_t calc_checksum(const uint8_t *data, int length);
 void kick_watchdog_task(device_t *state);
