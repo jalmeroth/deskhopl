@@ -217,13 +217,14 @@ bool process_keyboard_report(uint8_t const *report, uint8_t len);
 bool release_all_keys(void);
 // uart.c
 void receive_char(uart_packet_t *packet, device_t *state);
-void uart_send_packet(uint8_t interface, uint8_t report_id, const uint8_t *data,
-                      enum packet_type_e packet_type, uint8_t report_len);
+void uart_send_packet(enum packet_type_e packet_type, uint8_t interface,
+                      uint8_t report_id, uint8_t report_len,
+                      const uint8_t *data);
 void uart_send_value(const uint8_t value, enum packet_type_e packet_type);
 // usb.c
 bool send_tud_report(uint8_t instance, uint8_t report_id, uint8_t const *report,
                      uint8_t len);
-bool send_x_report(enum packet_type_e packet_type, uint8_t instance,
+bool send_x_report(enum packet_type_e packet_type, uint8_t interface,
                    uint8_t report_id, uint8_t const *report, uint8_t len);
 // utils.c
 uint8_t calc_checksum(const uint8_t *data, int length);

@@ -21,8 +21,9 @@
  * ===============  Sending Packets  ================ *
  * ================================================== */
 
-void uart_send_packet(uint8_t interface, uint8_t report_id, const uint8_t *data,
-                      enum packet_type_e packet_type, uint8_t report_len) {
+void uart_send_packet(enum packet_type_e packet_type, uint8_t interface,
+                      uint8_t report_id, uint8_t report_len,
+                      const uint8_t *data) {
   uint8_t raw_packet[RAW_PACKET_LENGTH] = {[0] = START1,
                                            [1] = START2,
                                            [2] = packet_type,
@@ -45,7 +46,7 @@ void uart_send_packet(uint8_t interface, uint8_t report_id, const uint8_t *data,
 
 void uart_send_value(const uint8_t value, enum packet_type_e packet_type) {
   const uint8_t data = value;
-  uart_send_packet(0, 0, &data, packet_type, sizeof(uint8_t));
+  uart_send_packet(packet_type, 0, 0, sizeof(uint8_t), &data);
 }
 
 /**================================================== *
