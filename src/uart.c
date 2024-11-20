@@ -21,12 +21,12 @@
  * ===============  Sending Packets  ================ *
  * ================================================== */
 
-void uart_send_packet(uint8_t instance, uint8_t report_id, const uint8_t *data,
+void uart_send_packet(uint8_t interface, uint8_t report_id, const uint8_t *data,
                       enum packet_type_e packet_type, int length) {
   uint8_t raw_packet[RAW_PACKET_LENGTH] = {[0] = START1,
                                            [1] = START2,
                                            [2] = packet_type,
-                                           [3] = instance,
+                                           [3] = interface,
                                            [4] = report_id,
                                            [5] = length,
                                            /* [6-21] is data, defaults to 0 */
