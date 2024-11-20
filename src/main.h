@@ -216,7 +216,7 @@ uint8_t get_pos_in_byte(uint8_t key);
 bool process_keyboard_report(uint8_t const *report, uint8_t len);
 bool release_all_keys(void);
 // uart.c
-void receive_char(uart_packet_t *packet, device_t *state);
+void uart_receive_char(uart_packet_t *packet, device_t *state);
 void uart_send_packet(enum packet_type_e packet_type, uint8_t interface,
                       uint8_t report_id, uint8_t report_len,
                       const uint8_t *data);

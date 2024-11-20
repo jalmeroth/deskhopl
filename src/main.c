@@ -31,7 +31,7 @@ void core1_main() {
       tuh_task();
     }
     state->core1_last_loop_pass = time_us_64();
-    receive_char(&in_packet, state);
+    uart_receive_char(&in_packet, state);
   }
 }
 

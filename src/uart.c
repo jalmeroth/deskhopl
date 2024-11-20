@@ -129,7 +129,7 @@ void handle_processing_state(uart_packet_t *packet, device_t *state,
 }
 
 /* Very simple state machine to receive and process packets over serial */
-void receive_char(uart_packet_t *packet, device_t *state) {
+void uart_receive_char(uart_packet_t *packet, device_t *state) {
   uint8_t *raw_packet = (uint8_t *)packet;
   static int count = 0;
 
