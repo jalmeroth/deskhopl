@@ -156,7 +156,7 @@ typedef struct {
 #define START_LENGTH 2
 
 #define TYPE_LENGTH 1
-#define INSTANCE_LENGTH 1
+#define INTERFACE_LENGTH 1
 #define REPORT_ID_LENGTH 1
 #define REPORT_LEN_LENGTH 1
 // For simplicity, all packet types are the same length
@@ -164,14 +164,14 @@ typedef struct {
 #define CHECKSUM_LENGTH 1
 
 #define PACKET_LENGTH                                                          \
-  (TYPE_LENGTH + INSTANCE_LENGTH + REPORT_ID_LENGTH + REPORT_LEN_LENGTH +      \
+  (TYPE_LENGTH + INTERFACE_LENGTH + REPORT_ID_LENGTH + REPORT_LEN_LENGTH +     \
    PACKET_DATA_LENGTH + CHECKSUM_LENGTH)
 #define RAW_PACKET_LENGTH (START_LENGTH + PACKET_LENGTH)
 
 /* Data structure defining packets of information transferred */
 typedef struct {
   uint8_t type;                     // Enum field describing the type of packet
-  uint8_t instance;                 // instance
+  uint8_t interface;                // interface
   uint8_t report_id;                // report_id
   uint8_t report_len;               // report_len
   uint8_t data[PACKET_DATA_LENGTH]; // Data goes here

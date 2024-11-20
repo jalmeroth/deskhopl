@@ -71,8 +71,8 @@ void handle_consumer(uint8_t instance, uint8_t report_id, uint8_t protocol,
 
 void handle_uart_generic_msg(uart_packet_t *packet, device_t *state) {
   (void)state;
-  send_x_report(packet->type, packet->instance, packet->report_id, packet->data,
-                packet->report_len);
+  send_x_report(packet->type, packet->interface, packet->report_id,
+                packet->data, packet->report_len);
 }
 
 void handle_uart_output_select_msg(uart_packet_t *packet, device_t *state) {

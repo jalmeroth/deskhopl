@@ -33,7 +33,7 @@ void send_packet(uint8_t instance, uint8_t report_id, const uint8_t *data,
                                            [22] = calc_checksum(data, length)};
 
   if (length > 0)
-    memcpy(&raw_packet[START_LENGTH + TYPE_LENGTH + INSTANCE_LENGTH +
+    memcpy(&raw_packet[START_LENGTH + TYPE_LENGTH + INTERFACE_LENGTH +
                        REPORT_ID_LENGTH + REPORT_LEN_LENGTH],
            data, length);
 
