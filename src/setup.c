@@ -18,8 +18,7 @@
 #include "main.h"
 
 void setup_uart(void) {
-  // init uart0 and configure stdio driver
-  // stdio_uart_init_full(UART_ZERO, UART_BAUD_RATE, UART_TX_PIN, UART_RX_PIN);
+  // init uart0 for pico-to-pico comms
   gpio_set_function((uint)UART_TX_PIN, GPIO_FUNC_UART);
   gpio_set_function((uint)UART_RX_PIN, GPIO_FUNC_UART);
   uart_init(UART_ZERO, UART_ZERO_BAUD_RATE);
@@ -65,7 +64,7 @@ void initial_setup(device_t *state) {
   // default 125MHz is not appropreate. Sysclock should be multiple of 12MHz.
   set_sys_clock_khz(120000, true);
 
-  /* Init and enable the on-board LED GPIO as output */
+  // Init and enable the on-board LED GPIO as output
   gpio_init(GPIO_LED_PIN);
   gpio_set_dir(GPIO_LED_PIN, GPIO_OUT);
   bi_decl(bi_1pin_with_name(GPIO_LED_PIN, "LED"));
@@ -77,10 +76,11 @@ void initial_setup(device_t *state) {
   setup_tuh();
 
   multicore_reset_core1();
-  // all USB task run in core1
+
   multicore_launch_core1(core1_main);
 
   set_user_config(state);
 
+  // TODO: Maintain active device on reboots
   switch_output_a(state);
 }
