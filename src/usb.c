@@ -33,7 +33,7 @@ bool send_x_report(enum packet_type_e packet_type, uint8_t instance,
     global_state.last_activity = time_us_64();
     send_tud_report(instance, report_id, report, len);
   } else {
-    send_packet(instance, report_id, (uint8_t *)report, packet_type, len);
+    uart_send_packet(instance, report_id, (uint8_t *)report, packet_type, len);
   }
 
   return success;

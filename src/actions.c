@@ -18,7 +18,7 @@
 #include "main.h"
 
 void enable_debug(void) {
-  send_value(1, ENABLE_DEBUG_MSG);
+  uart_send_value(1, ENABLE_DEBUG_MSG);
   _enable_debug();
 }
 
@@ -29,7 +29,7 @@ void _enable_debug(void) {
 
 /* This key combo locks both outputs simultaneously */
 void lock_screen(void) {
-  send_value(1, LOCK_SCREEN_MSG);
+  uart_send_value(1, LOCK_SCREEN_MSG);
   send_lock_screen_report(NULL, NULL);
 }
 
@@ -37,12 +37,12 @@ void request_reboot() {
   if (global_state.active_output == BOARD_ROLE) {
     global_state.reboot_requested = true;
   } else {
-    send_value(1, REQUEST_REBOOT_MSG);
+    uart_send_value(1, REQUEST_REBOOT_MSG);
   }
 }
 
 void suspend_pc(void) {
-  send_value(1, SUSPEND_PC_MSG);
+  uart_send_value(1, SUSPEND_PC_MSG);
   send_suspend_pc_report(NULL, NULL);
 }
 
@@ -153,13 +153,13 @@ void set_onboard_led(device_t *state) {
 
 void switch_output_a(device_t *state) {
   state->active_output = PICO_A;
-  send_value(state->active_output, OUTPUT_SELECT_MSG);
+  uart_send_value(state->active_output, OUTPUT_SELECT_MSG);
   set_onboard_led(state);
 }
 
 void toggle_output(void) {
   global_state.active_output ^= 1;
-  send_value(global_state.active_output, OUTPUT_SELECT_MSG);
+  uart_send_value(global_state.active_output, OUTPUT_SELECT_MSG);
   set_onboard_led(&global_state);
   release_all_keys();
 }
