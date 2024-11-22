@@ -35,8 +35,8 @@ void tuh_hid_report_received_cb(uint8_t dev_addr, uint8_t instance,
 
   // lets dertermine protocol mode first
   uint8_t protocol = tuh_hid_get_protocol(dev_addr, instance);
-  printf("h[report] dev_addr: %d instance: %d protocol: %d\r\n", dev_addr,
-         instance, protocol);
+  // printf("h[report] dev_addr: %d instance: %d protocol: %d\r\n", dev_addr,
+  //        instance, protocol);
 
   uint8_t report_id = 0, usage = 0;
   uint16_t usage_page = 0;
@@ -62,13 +62,13 @@ void tuh_hid_report_received_cb(uint8_t dev_addr, uint8_t instance,
     usage = hid_info[instance].report_info[0].usage;
   }
 
-  printf("report_id: %d, usage_page: %#06x, usage: %#04x, len: %d\r\n",
-         report_id, usage_page, usage, len);
+  // printf("report_id: %d, usage_page: %#06x, usage: %#04x, len: %d\r\n",
+  //        report_id, usage_page, usage, len);
 
-  for (uint8_t i = 0; i < len; i++) {
-    printf("%02x ", report[i]);
-  }
-  printf("\r\n");
+  // for (uint8_t i = 0; i < len; i++) {
+  //   printf("%02x ", report[i]);
+  // }
+  // printf("\r\n");
 
   if (usage_page == HID_USAGE_PAGE_DESKTOP) {
     if (usage == HID_USAGE_DESKTOP_KEYBOARD) {
