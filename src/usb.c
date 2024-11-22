@@ -4,16 +4,18 @@ bool send_tud_report(uint8_t interface, uint8_t report_id, uint8_t report_len,
                      uint8_t const *report) {
   bool success = false;
   if (tud_ready()) {
-    success = tud_hid_n_report(interface, report_id, report, report_len);
-    printf("x[report] interface %d report_id %d len %d\r\n", interface,
-           report_id, report_len);
-    for (uint8_t i = 0; i < report_len; i++) {
-      printf("%02x ", report[i]);
+    if (global_state.tud_connected) {
+      success = tud_hid_n_report(interface, report_id, report, report_len);
     }
-    printf("\r\n");
-    if (!success) {
-      printf("success: %s\r\n", success ? "true" : "false");
-    }
+    // printf("x[report] interface %d report_id %d len %d\r\n", interface,
+    //        report_id, report_len);
+    // for (uint8_t i = 0; i < report_len; i++) {
+    //   printf("%02x ", report[i]);
+    // }
+    // printf("\r\n");
+    // if (!success) {
+    //   printf("success: %s\r\n", success ? "true" : "false");
+    // }
   } else {
     printf("x[report] tud not ready\r\n");
     remote_wakeup();

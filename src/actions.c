@@ -139,9 +139,6 @@ void send_suspend_pc_report(uart_packet_t *packet, device_t *state) {
     eject_report.apple = 1 << 3; // Usage (Eject)
     send_tud_report(ITF_NUM_HID_MS, 3, sizeof(consumer_report_t),
                     (uint8_t *)&eject_report);
-    // we need to make sure MACOS that is not receiving
-    // any reports until our USB device gets suspended
-    switch_output_a(state);
   }
   set_tud_connected(false);
 }
