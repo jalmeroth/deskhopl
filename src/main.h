@@ -88,6 +88,7 @@ enum packet_type_e {
   SUSPEND_PC_MSG = 17,
   ENABLE_DEBUG_MSG = 18,
   REQUEST_REBOOT_MSG = 19,
+  OUTPUT_GET_MSG = 20,
 };
 typedef enum { IDLE, READING_PACKET, PROCESSING_PACKET } uart_state_t;
 
@@ -190,6 +191,7 @@ void setup_tuh(void);
 // actions.c
 void _enable_debug(void);
 void enable_debug(void);
+void query_active_output(device_t *state);
 void lock_screen(void);
 void request_reboot(void);
 void screensaver_task(device_t *state);
@@ -209,6 +211,7 @@ void handle_consumer(uint8_t instance, uint8_t report_id, uint8_t protocol,
 void handle_uart_enable_debug_msg(uart_packet_t *packet, device_t *state);
 void handle_uart_generic_msg(uart_packet_t *packet, device_t *state);
 void handle_uart_output_select_msg(uart_packet_t *packet, device_t *state);
+void handle_uart_output_get_msg(uart_packet_t *packet, device_t *state);
 void handle_uart_request_reboot_msg(uart_packet_t *packet, device_t *state);
 // keyboard.c
 uint8_t get_byte_offset(uint8_t key);

@@ -86,6 +86,10 @@ void handle_uart_output_select_msg(uart_packet_t *packet, device_t *state) {
   set_onboard_led(state);
 }
 
+void handle_uart_output_get_msg(uart_packet_t *packet, device_t *state) {
+  uart_send_value(OUTPUT_SELECT_MSG, state->active_output);
+}
+
 void handle_uart_enable_debug_msg(uart_packet_t *packet, device_t *state) {
   (void)packet;
   (void)state;

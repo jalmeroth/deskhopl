@@ -81,6 +81,5 @@ void initial_setup(device_t *state) {
 
   set_user_config(state);
 
-  // TODO: Maintain active device on reboots
-  switch_output_a(state);
+  query_active_output(state);
 }

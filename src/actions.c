@@ -160,3 +160,8 @@ void toggle_output(void) {
   set_onboard_led(&global_state);
   release_all_keys();
 }
+
+void query_active_output(device_t *state) {
+  uart_send_value(OUTPUT_GET_MSG, 1);
+  set_onboard_led(state);
+}
