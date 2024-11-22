@@ -135,6 +135,7 @@ void send_suspend_pc_report(uart_packet_t *packet, device_t *state) {
                   (uint8_t *)&suspend_report);
 
   if (global_state.device_config[BOARD_ROLE].os == MACOS) {
+    sleep_ms(10);
     consumer_report_t eject_report = {0};
     eject_report.apple = 1 << 3; // Usage (Eject)
     send_tud_report(ITF_NUM_HID_MS, 3, sizeof(consumer_report_t),
