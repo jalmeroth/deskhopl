@@ -231,6 +231,7 @@ bool send_x_report(enum packet_type_e packet_type, uint8_t interface,
 uint8_t calc_checksum(const uint8_t *data, int length);
 void kick_watchdog_task(device_t *state);
 void set_tud_connected(bool connected);
+void remote_wakeup(void);
 bool verify_checksum(const uart_packet_t *packet);
 // stdio.h
 int printf(const char *format, ...);

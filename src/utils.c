@@ -58,3 +58,10 @@ void kick_watchdog_task(device_t *state) {
     watchdog_update();
   }
 }
+
+void remote_wakeup(void) {
+  tud_remote_wakeup();
+  if (global_state.device_config[BOARD_ROLE].os == MACOS) {
+    request_reboot();
+  }
+}

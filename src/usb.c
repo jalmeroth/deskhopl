@@ -16,6 +16,7 @@ bool send_tud_report(uint8_t interface, uint8_t report_id, uint8_t report_len,
     }
   } else {
     printf("x[report] tud not ready\r\n");
+    remote_wakeup();
   }
   return success;
 }
