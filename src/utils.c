@@ -15,6 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "device/usbd.h"
 #include "main.h"
 
 /**================================================== *
@@ -62,6 +63,8 @@ void kick_watchdog_task(device_t *state) {
 void remote_wakeup(void) {
   tud_remote_wakeup();
   if (global_state.device_config[BOARD_ROLE].os == MACOS) {
+    // workaround: so we can get another round of sleep
+    // macOS will not allow to suspend otherwise
     request_reboot();
   }
 }
