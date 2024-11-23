@@ -79,16 +79,12 @@ uint16_t tud_hid_get_report_cb(uint8_t instance, uint8_t report_id,
 void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id,
                            hid_report_type_t report_type, uint8_t const *buffer,
                            uint16_t bufsize) {
-  printf("state: %s\r\n", buffer[0] == 0 ? "off" : "on");
-  printf("d[3] instance: %d report_id: %d report_type: %d, len: %d\r\n",
-         instance, report_id, report_type, bufsize);
-  for (uint8_t i = 0; i < bufsize; i++) {
-    printf("%02x ", buffer[i]);
+  (void)bufsize;
+  // we received a SET_REPORT request to (not) send reports:
+  // this happens on suspend(0)
+  // should get reverted on resume(1)
+  if (instance == ITF_NUM_HID_KB && report_id == REPORT_ID_KEYBOARD &&
+      report_type == HID_REPORT_TYPE_OUTPUT) {
+    set_tud_connected(buffer[0] == 1);
   }
-  printf("\r\n");
-
-  // (void)report_id;
-  // (void)report_type;
-  // (void)buffer;
-  // (void)bufsize;
 }
