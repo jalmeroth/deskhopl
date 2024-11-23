@@ -7,6 +7,7 @@
 - `RIGHT ALT + RIGHT SHIFT + S` suspends both PCs
 - `RIGHT ALT + RIGHT SHIFT + D` enables debug mode\*
 - `RIGHT ALT + RIGHT SHIFT + R` request to reboot active board
+- `RIGHT ALT + RIGHT SHIFT + Q` suspends active PC
 
 \*the output will be shown on the `UART1 TX` pin.
 

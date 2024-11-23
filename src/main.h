@@ -198,7 +198,10 @@ void screensaver_task(device_t *state);
 void send_lock_screen_report(uart_packet_t *packet, device_t *state);
 void send_suspend_pc_report(uart_packet_t *packet, device_t *state);
 void set_onboard_led(device_t *state);
-void suspend_pc(void);
+void suspend_active_pc(void);
+void suspend_all_pcs(void);
+void _suspend_linux(void);
+void _suspend_macos(void);
 void switch_output_a(device_t *state);
 void toggle_output(void);
 // handlers.c

@@ -41,11 +41,6 @@ void request_reboot() {
   }
 }
 
-void suspend_pc(void) {
-  uart_send_value(SUSPEND_PC_MSG, 1);
-  send_suspend_pc_report(NULL, NULL);
-}
-
 void screensaver_task(device_t *state) {
   const unsigned int mouse_move_delay = 1000000;
   uint64_t inactivity_period = time_us_64() - state->last_activity;
@@ -109,37 +104,61 @@ void send_lock_screen_report(uart_packet_t *packet, device_t *state) {
                   (uint8_t *)&release_keys);
 }
 
+void suspend_active_pc(void) {
+  if (global_state.active_output == BOARD_ROLE) {
+    send_suspend_pc_report(NULL, NULL);
+  } else {
+    uart_send_value(SUSPEND_PC_MSG, 1);
+  }
+}
+
+void suspend_all_pcs(void) {
+  uart_send_value(SUSPEND_PC_MSG, 1);
+  send_suspend_pc_report(NULL, NULL);
+}
+
+void _suspend_linux(void) {
+  keyboard_report_t suspend_report = {0};
+  uint8_t off, pos;
+
+  suspend_report.modifier = KEYBOARD_MODIFIER_LEFTGUI |
+                            KEYBOARD_MODIFIER_LEFTCTRL |
+                            KEYBOARD_MODIFIER_LEFTSHIFT;
+  off = get_byte_offset(HID_KEY_Q);
+  pos = get_pos_in_byte(HID_KEY_Q);
+  suspend_report.keycode[off] = 1 << pos;
+  send_tud_report(ITF_NUM_HID_KB, REPORT_ID_KEYBOARD, sizeof(keyboard_report_t),
+                  (uint8_t *)&suspend_report);
+}
+
+void _suspend_macos(void) {
+  keyboard_report_t suspend_report = {0};
+
+  // send modifiers only
+  suspend_report.modifier =
+      KEYBOARD_MODIFIER_LEFTALT | KEYBOARD_MODIFIER_LEFTGUI;
+  send_tud_report(ITF_NUM_HID_KB, REPORT_ID_KEYBOARD, sizeof(keyboard_report_t),
+                  (uint8_t *)&suspend_report);
+  // wait a bit
+  sleep_ms(10);
+  // send eject key
+  consumer_report_t eject_report = {0};
+  eject_report.apple = 1 << 3; // Usage (Eject)
+  send_tud_report(ITF_NUM_HID_MS, 3, sizeof(consumer_report_t),
+                  (uint8_t *)&eject_report);
+}
+
 void send_suspend_pc_report(uart_packet_t *packet, device_t *state) {
   (void)packet;
   (void)state;
 
-  keyboard_report_t suspend_report = {0};
-  uint8_t off, pos;
-
   switch (global_state.device_config[BOARD_ROLE].os) {
   case LINUX:
-    suspend_report.modifier = KEYBOARD_MODIFIER_LEFTGUI |
-                              KEYBOARD_MODIFIER_LEFTCTRL |
-                              KEYBOARD_MODIFIER_LEFTSHIFT;
-    off = get_byte_offset(HID_KEY_Q);
-    pos = get_pos_in_byte(HID_KEY_Q);
-    suspend_report.keycode[off] = 1 << pos;
+    _suspend_linux();
     break;
   case MACOS:
-    suspend_report.modifier =
-        KEYBOARD_MODIFIER_LEFTALT | KEYBOARD_MODIFIER_LEFTGUI;
+    _suspend_macos();
     break;
-  }
-
-  send_tud_report(ITF_NUM_HID_KB, REPORT_ID_KEYBOARD, sizeof(keyboard_report_t),
-                  (uint8_t *)&suspend_report);
-
-  if (global_state.device_config[BOARD_ROLE].os == MACOS) {
-    sleep_ms(10);
-    consumer_report_t eject_report = {0};
-    eject_report.apple = 1 << 3; // Usage (Eject)
-    send_tud_report(ITF_NUM_HID_MS, 3, sizeof(consumer_report_t),
-                    (uint8_t *)&eject_report);
   }
   set_tud_connected(false);
 }
