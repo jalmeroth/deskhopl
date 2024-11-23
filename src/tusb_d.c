@@ -79,12 +79,10 @@ uint16_t tud_hid_get_report_cb(uint8_t instance, uint8_t report_id,
 void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id,
                            hid_report_type_t report_type, uint8_t const *buffer,
                            uint16_t bufsize) {
+  (void)report_id;
   (void)bufsize;
-  // we received a SET_REPORT request to (not) send reports:
-  // this happens on suspend(0)
-  // should get reverted on resume(1)
-  if (instance == ITF_NUM_HID_KB && report_id == REPORT_ID_KEYBOARD &&
-      report_type == HID_REPORT_TYPE_OUTPUT) {
-    set_tud_connected(buffer[0] == 1);
-  }
+  // mostly we get type out reports from host to update keyboard leds.
+  // we ignore these reports for now.
+  printf("d[set_report] idx: %x, type: %x, buf: %x\r\n", instance, report_type,
+         buffer[0]);
 }
