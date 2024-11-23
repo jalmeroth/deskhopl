@@ -46,11 +46,23 @@ jobs:
           export PICO_SDK_PATH="${PWD}/pico-sdk"
           export PICO_TINYUSB_PATH="${PWD}/tinyusb"
 
-          mkdir -p deskhopl/src/build
-          cd deskhopl/src/build
+          # create pico & pico2 build dirs
+          mkdir -p deskhopl/src/build-{pico,pico2}
+          # build pico first
+          pushd deskhopl/src/build-pico
           cmake ..
           make
+          popd
+          # build pico2 second
+          pushd deskhopl/src/build-pico2
+          cmake -DDH_PICO_2=1 ..
+          make
+          # rename pico2 artificats
+          mv board_A.uf2 board_A_pico2.uf2
+          mv board_B.uf2 board_B_pico2.uf2
 
       - uses: actions/upload-artifact@v4
         with:
-          path: deskhopl/src/build/*.uf2
+          path: |
+            deskhopl/src/build-pico/*.uf2
+            deskhopl/src/build-pico2/*.uf2
