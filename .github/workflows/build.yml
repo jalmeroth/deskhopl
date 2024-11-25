@@ -19,7 +19,7 @@ jobs:
         with:
           repository: "raspberrypi/pico-sdk"
           path: "pico-sdk"
-          ref: "refs/tags/2.0.0"
+          ref: "refs/tags/2.1.0"
 
       - uses: actions/checkout@v4
         name: Checkout tinyusb
