@@ -19,14 +19,14 @@ jobs:
         with:
           repository: "raspberrypi/pico-sdk"
           path: "pico-sdk"
-          ref: "refs/tags/2.1.0"
+          ref: "refs/tags/2.1.1"
 
       - uses: actions/checkout@v4
         name: Checkout tinyusb
         with:
           repository: "hathach/tinyusb"
           path: "tinyusb"
-          ref: "refs/tags/0.17.0"
+          ref: "refs/tags/0.18.0"
 
       - uses: actions/checkout@v4
         name: Checkout pico-pio-usb
